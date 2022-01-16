@@ -1,0 +1,2461 @@
+---
+title: "Càrrega de dades del casos, defuncions i COVID-19"
+author: "Pol Riba Mosoll"
+date: "9/11/2021"
+output: html_document
+---
+
+```{r}
+library(readxl)
+library(dplyr)
+```
+
+#### Barcelona: Perfecte
+
+```{r}
+
+# Descarreguem totes les dades
+
+Bcn <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Barcelona/Barcelona_CasosCovid.xlsx")
+Bcn_casos <- Bcn[ ,1:2]
+Bcn_defuncions <- Bcn[, c(1,9)]
+Bcn_pollution <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Barcelona/AirQuality_Barcelona.csv", sep=";")
+Bcn_pcptc <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Barcelona/Barcelona_precipitacio.xlsx")
+Bcn_pcptc <- Bcn_pcptc[seq(dim(Bcn_pcptc)[1],1),]
+Bcn_temp <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Barcelona/Barcelona_temperatura.xlsx")
+Bcn_temp <- Bcn_temp[seq(dim(Bcn_temp)[1],1),]
+
+```
+
+```{r}
+
+#Cambiem els noms de les variables per homogenitzar
+
+names(Bcn_casos)[1]<-paste("Date")
+names(Bcn_casos)[2]<-paste("Covid-19 Cases")
+
+names(Bcn_defuncions)[1]<-paste("Date")
+names(Bcn_defuncions)[2]<-paste("Covid-19 Deaths")
+
+names(Bcn_pollution)[1]<-paste("Date")
+Bcn_pollution$Date <- as.Date(Bcn_pollution$Date ,format="%d/%m/%Y")
+
+names(Bcn_pcptc)[1]<-paste("Date")
+names(Bcn_pcptc)[2]<-paste("Precipitation L/m2")
+
+names(Bcn_temp)[1]<-paste("Date")
+names(Bcn_temp)[2]<-paste("T. max")
+names(Bcn_temp)[3]<-paste("T. min")
+
+
+# Ajuntem totes les variables per crear el dataframe
+
+BCN <- merge(Bcn_casos, Bcn_defuncions)
+BCN <- merge(BCN, Bcn_pcptc)
+BCN <- merge(BCN, Bcn_temp)
+BCN$Date <- as.Date(BCN$Date)
+BCN <- merge(BCN, Bcn_pollution)
+library(dplyr)
+BCN <- distinct(BCN)
+BCN <- BCN[-1, c(-10,-11)]
+```
+
+
+
+#### Madrid: Perfecte
+
+```{r}
+
+# Descarreguem totes les dades
+
+Madrid <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Madrid/Madrid_CasosCovid.xlsx")
+Madrid_casos <- Madrid[ ,1:2]
+Madrid_casos <- Madrid_casos[seq(dim(Madrid_casos)[1],1),]
+Madrid_pollution <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Madrid/AirQuality_madrid.csv", sep = ",")
+Madrid_temp <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Madrid/Madrid_temperatura.xlsx")
+Madrid_pcptc <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Madrid/Madrid_precipitacions.xlsx")
+Madrid_pcptc <- Madrid_pcptc[seq(dim(Madrid_pcptc)[1],1),]
+Madrid_temp <- Madrid_temp[seq(dim(Madrid_temp)[1],1),]
+```
+
+```{r}
+
+# Cambiem els noms de les variables per homogenitzar
+
+names(Madrid_casos)[1]<-paste("Date")
+names(Madrid_casos)[2]<-paste("Covid-19 Cases")
+
+names(Madrid_pollution)[1]<-paste("Date")
+Madrid_pollution$Date <- as.Date(Madrid_pollution$Date ,format="%Y/%m/%d")
+
+names(Madrid_pcptc)[1]<-paste("Date")
+names(Madrid_pcptc)[2]<-paste("Precipitation L/m2")
+
+names(Madrid_temp)[1]<-paste("Date")
+names(Madrid_temp)[2]<-paste("T. max")
+names(Madrid_temp)[3]<-paste("T. min")
+
+
+# Ajuntem totes les variables per crear el dataframe
+
+MADRID <- merge(Madrid_casos, Madrid_pcptc)
+MADRID  <- merge(MADRID , Madrid_temp)
+MADRID $Date <- as.Date(MADRID$Date)
+MADRID  <- merge(MADRID , Madrid_pollution)
+library(dplyr)
+MADRID <- distinct(MADRID)
+MADRID <- MADRID[-458, c(-11)]
+```
+
+
+
+#### Girona: Perfecte
+
+```{r}
+
+# Descarreguem totes les dades
+
+Girona <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Girona/Girona_CasosCovid.xlsx")
+Girona_casos <- Girona[ , 1:2]
+Girona_defuncions <- Girona[ , c(1,9)]
+Girona_pollution <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Girona/AirQuality_Girona.csv", sep = ",")
+Girona_temp <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Girona/Girona_temperatura.xlsx")
+Girona_pcptc <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Girona/Girona_precipitacions.xlsx")
+Girona_pcptc <- Girona_pcptc[seq(dim(Girona_pcptc)[1],1),]
+Girona_temp <- Girona_temp[seq(dim(Girona_temp)[1],1),]
+
+```
+
+```{r}
+
+# Cambiem els noms de les variables per homogenitzar
+
+names(Girona_casos)[1]<-paste("Date")
+names(Girona_casos)[2]<-paste("Covid-19 Cases")
+
+names(Girona_defuncions)[1]<-paste("Date")
+names(Girona_defuncions)[2]<-paste("Covid-19 Deaths")
+
+names(Girona_pollution)[1]<-paste("Date")
+Girona_pollution$Date <- as.Date(Girona_pollution$Date ,format="%Y/%m/%d")
+
+names(Girona_pcptc)[1]<-paste("Date")
+names(Girona_pcptc)[2]<-paste("Precipitation L/m2")
+
+names(Girona_temp)[1]<-paste("Date")
+names(Girona_temp)[2]<-paste("T. max")
+names(Girona_temp)[3]<-paste("T. min")
+
+
+# Ajuntem totes les variables per crear el dataframe
+
+GIRONA <- merge(Girona_casos, Girona_defuncions)
+GIRONA <- merge(GIRONA, Girona_pcptc)
+GIRONA <- merge(GIRONA, Girona_temp)
+GIRONA$Date <- as.Date(GIRONA$Date)
+GIRONA$Date <- as.Date(GIRONA$Date ,format="%Y/%m/%d")
+GIRONA <- merge(GIRONA, Girona_pollution)
+library(dplyr)
+GIRONA <- distinct(GIRONA)
+GIRONA <- GIRONA[ ,c(-8,-10,-11)]
+```
+
+
+
+#### Tarragona: Perfecte
+
+```{r}
+
+# Descarreguem totes les dades
+
+Tgn <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Tarragona/Tarragona_CasosCovid.xlsx")
+Tgn_casos <- Tgn[ , 1:2]
+Tgn_defuncions <- Tgn[ , c(1,9)]
+Tgn_pollution <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Tarragona/AirQUality_Tarragona.csv", sep = ",")
+Tgn_temp <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Tarragona/Tarragona_temperatura.xlsx")
+Tgn_pcptc <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Tarragona/Tarragona_precipitacions.xlsx")
+Tgn_pcptc <- Tgn_pcptc[seq(dim(Tgn_pcptc)[1],1),]
+Tgn_temp <- Tgn_temp[seq(dim(Tgn_temp)[1],1),]
+
+```
+
+```{r}
+
+# Cambiem els noms de les variables per homogenitzar
+
+names(Tgn_casos)[1]<-paste("Date")
+names(Tgn_casos)[2]<-paste("Covid-19 Cases")
+
+names(Tgn_defuncions)[1]<-paste("Date")
+names(Tgn_defuncions)[2]<-paste("Covid-19 Deaths")
+
+names(Tgn_pollution)[1]<-paste("Date")
+Tgn_pollution$Date <- as.Date(Tgn_pollution$Date ,format="%Y/%m/%d")
+
+names(Tgn_pcptc)[1]<-paste("Date")
+names(Tgn_pcptc)[2]<-paste("Precipitation L/m2")
+
+names(Tgn_temp)[1]<-paste("Date")
+names(Tgn_temp)[2]<-paste("T. max")
+names(Tgn_temp)[3]<-paste("T. min")
+
+
+# Ajuntem totes les variables per crear el dataframe
+
+TARRAGONA <- merge(Tgn_casos, Tgn_defuncions)
+TARRAGONA <- merge(TARRAGONA, Tgn_pcptc)
+TARRAGONA <- merge(TARRAGONA, Tgn_temp)
+TARRAGONA$Date <- as.Date(TARRAGONA$Date)
+TARRAGONA <- merge(TARRAGONA, Tgn_pollution)
+library(dplyr)
+TARRAGONA <- distinct(TARRAGONA)
+TARRAGONA <- TARRAGONA[,c(-7,-11,-12)]
+```
+
+
+
+#### Lleida: Perfecte
+
+```{r}
+
+# Descarreguem totes les dades
+
+Lleida <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Lleida/Lleida_CasosCovid.xlsx")
+Lleida_casos <- Lleida[ , 1:2]
+Lleida_defuncions <- Lleida[ , c(1,9)]
+Lleida_pollution <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Lleida/AirQUality_Lleida.csv", sep = ",")
+Lleida_temp <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Lleida/Lleida_temperatura.xlsx")
+Lleida_pcptc <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Lleida/Lleida_precipitacions.xlsx")
+Lleida_pcptc <- Lleida_pcptc[seq(dim(Lleida_pcptc)[1],1),]
+Lleida_temp <- Lleida_temp[seq(dim(Lleida_temp)[1],1),]
+```
+
+
+```{r}
+
+# Cambiem els noms de les variables per homogenitzar
+
+names(Lleida_casos)[1]<-paste("Date")
+names(Lleida_casos)[2]<-paste("Covid-19 Cases")
+
+names(Lleida_defuncions)[1]<-paste("Date")
+names(Lleida_defuncions)[2]<-paste("Covid-19 Deaths")
+
+names(Lleida_pollution)[1]<-paste("Date")
+Lleida_pollution$Date <- as.Date(Lleida_pollution$Date ,format="%Y/%m/%d")
+
+names(Lleida_pcptc)[1]<-paste("Date")
+names(Lleida_pcptc)[2]<-paste("Precipitation L/m2")
+
+names(Lleida_temp)[1]<-paste("Date")
+names(Lleida_temp)[2]<-paste("T. max")
+names(Lleida_temp)[3]<-paste("T. min")
+
+
+# Ajuntem totes les variables per crear el dataframe
+
+LLEIDA <- merge(Lleida_casos, Lleida_defuncions)
+LLEIDA <- merge(LLEIDA, Lleida_pcptc)
+LLEIDA <- merge(LLEIDA, Lleida_temp)
+LLEIDA$Date <- as.Date(LLEIDA$Date)
+LLEIDA <- merge(LLEIDA, Lleida_pollution)
+library(dplyr)
+LLEIDA <- distinct(LLEIDA)
+LLEIDA <- LLEIDA[ , c(-10,-11)]
+```
+
+
+
+#### Bilbao: Perfecte
+
+```{r}
+
+# Descarreguem totes les dades
+
+Bilbao <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Bilbao/Bilbao_CasosCovid.xlsx")
+Bilbao_casos <- Bilbao[ , 1:2]
+Bilbao_casos <- Bilbao_casos[seq(dim(Bilbao_casos)[1],1),]
+Bilbao_pollution <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Bilbao/AirQUality_Bilbao.csv", sep = ",")
+Bilbao_temp <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Bilbao/Bilbao_temperatura.xlsx")
+Bilbao_pcptc <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Bilbao/Bilbao_precipitacions.xlsx")
+Bilbao_pcptc <- Bilbao_pcptc[seq(dim(Bilbao_pcptc)[1],1),]
+Bilbao_temp <- Bilbao_temp[seq(dim(Bilbao_temp)[1],1),]
+```
+
+```{r}
+
+# Cambiem els noms de les variables per homogenitzar
+
+names(Bilbao_casos)[1]<-paste("Date")
+names(Bilbao_casos)[2]<-paste("Covid-19 Cases")
+
+names(Bilbao_pollution)[1]<-paste("Date")
+Bilbao_pollution$Date <- as.Date(Bilbao_pollution$Date ,format="%Y/%m/%d")
+
+names(Bilbao_pcptc)[1]<-paste("Date")
+names(Bilbao_pcptc)[2]<-paste("Precipitation L/m2")
+
+names(Bilbao_temp)[1]<-paste("Date")
+names(Bilbao_temp)[2]<-paste("T. max")
+names(Bilbao_temp)[3]<-paste("T. min")
+Bilbao_casos$Date <- as.Date(Bilbao_casos$Date ,format="%Y/%m/%d")
+Bilbao_pcptc$Date <- as.Date(Bilbao_pcptc$Date ,format="%Y/%m/%d")
+
+# Ajuntem totes les variables per crear el dataframe
+
+BILBAO <- merge(Bilbao_casos, Bilbao_pcptc)
+BILBAO <- merge(BILBAO, Bilbao_pollution)
+BILBAO$Date <- as.Date(BILBAO$Date)
+Bilbao_temp$Date <- as.Date(Bilbao_temp$Date)
+BILBAO <- merge(BILBAO, Bilbao_temp)
+library(dplyr)
+BILBAO <- distinct(BILBAO)
+BILBAO <- BILBAO[,-9]
+```
+
+
+
+#### Donostia: Perfecte
+
+```{r}
+# Descarreguem totes les dades
+
+Donostia <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Donostia/Donostia.xlsx")
+Donostia_casos <- Donostia[,1:2]
+Donostia_casos <- Donostia_casos[seq(dim(Donostia_casos)[1],1),]
+Donostia_casos <- Donostia_casos[c(-1,-2),]
+Donostia_pollution <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Donostia/AirQUality_Donostia.csv", sep = ",")
+Donostia_temp <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Donostia/Donostia_temperatura.xlsx")
+Donostia_pcptc <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Donostia/Donostia_precipitacions.xlsx")
+Donostia_pcptc <- Donostia_pcptc[seq(dim(Donostia_pcptc)[1],1),]
+Donostia_temp <- Donostia_temp[seq(dim(Donostia_temp)[1],1),]
+
+```
+
+```{r}
+
+# Cambiem els noms de les variables per homogenitzar
+
+names(Donostia_casos)[1]<-paste("Date")
+names(Donostia_casos)[2]<-paste("Covid-19 Cases")
+
+names(Donostia_pollution)[1]<-paste("Date")
+Donostia_pollution$Date <- as.Date(Donostia_pollution$Date ,format="%Y/%m/%d")
+
+names(Donostia_pcptc)[1]<-paste("Date")
+names(Donostia_pcptc)[2]<-paste("Precipitation L/m2")
+
+names(Donostia_temp)[1]<-paste("Date")
+names(Donostia_temp)[2]<-paste("T. max")
+names(Donostia_temp)[3]<-paste("T. min")
+Donostia_casos$Date <- as.Date(Donostia_casos$Date ,format="%Y/%m/%d")
+Donostia_pcptc$Date <- as.Date(Donostia_pcptc$Date ,format="%Y/%m/%d")
+
+# Ajuntem totes les variables per crear el dataframe
+
+DONOSTIA <- merge(Donostia_casos, Donostia_pcptc)
+DONOSTIA <- merge(DONOSTIA, Donostia_pollution)
+DONOSTIA$Date <- as.Date(DONOSTIA$Date)
+Donostia_temp$Date <- as.Date(Donostia_temp$Date)
+DONOSTIA <- merge(DONOSTIA, Donostia_temp)
+library(dplyr)
+DONOSTIA <- distinct(DONOSTIA)
+DONOSTIA <- DONOSTIA[ ,c(-4,-5,-6,-7,-8,-9,-16)]
+```
+
+
+
+
+#### Murcia: Perfecte
+
+```{r}
+
+# Descarreguem totes les dades
+
+Murcia_casos <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Murcia/CasosCovid_Murcia.xlsx")
+Murcia_defuncions <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Murcia/DefuncionsCovid_Murcia.csv")
+Murcia_pollution <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Murcia/Murcia_pollution.csv")
+Murcia_temp <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Murcia/Murcia_tempertura.xlsx")
+Murcia_pcptc <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Murcia/Murcia_precipitacions.xlsx")
+Murcia_pcptc <- Murcia_pcptc[seq(dim(Murcia_pcptc)[1],1),]
+Murcia_temp <- Murcia_temp[seq(dim(Murcia_temp)[1],1),]
+
+```
+
+```{r}
+
+# Cambiem els noms de les variables per homogenitzar
+
+names(Murcia_casos)[1]<-paste("Date")
+names(Murcia_casos)[2]<-paste("Covid-19 Cases")
+
+names(Murcia_defuncions)[1]<-paste("Date")
+names(Murcia_defuncions)[2]<-paste("Covid-19 Deaths")
+Murcia_defuncions <- Murcia_defuncions[ , c(-3,-4,-5,-6)]
+
+names(Murcia_pcptc)[1]<-paste("Date")
+names(Murcia_pcptc)[2]<-paste("Precipitation L/m2")
+
+names(Murcia_temp)[1]<-paste("Date")
+names(Murcia_temp)[2]<-paste("T. max")
+names(Murcia_temp)[3]<-paste("T. min")
+
+names(Murcia_pollution)[1]<-paste("Date")
+
+Murcia_pollution$Date <- as.Date(Murcia_pollution$Date) # ,format="%d/%m/%Y")
+Murcia_defuncions$Date <- as.Date(Murcia_defuncions$Date ,format="%d/%m/%Y")
+Murcia_casos$Date <- as.Date(Murcia_casos$Date,format="%d/%m/%Y")
+Murcia_pcptc$Date <- as.Date(Murcia_pcptc$Date ,format="%d/%m/%Y")
+Murcia_temp$Date <- as.Date(Murcia_temp$Date, format="%d/%m/%Y")
+
+
+# Ajuntem totes les variables per crear el dataframe
+
+MURCIA <- merge(Murcia_casos, Murcia_defuncions)
+MURCIA <- merge(MURCIA, Murcia_pcptc)
+MURCIA <- merge(MURCIA, Murcia_temp)
+MURCIA <- merge(MURCIA, Murcia_pollution)
+library(dplyr)
+MURCIA <- distinct(MURCIA)
+MURCIA <- MURCIA[,-11]
+
+```
+
+
+
+#### Santander: Problemes amb el format de les dates de casos i també en els casos
+
+```{r}
+
+# Descarreguem totes les dades
+
+Std_casos <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Santander/Santander_CasosCovid.csv", sep = ";", header = T)
+Std_defuncions <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Santander/Santander_DefuncionsCovid.csv", sep = ";", header = T)
+Std_pollution <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Santander/AirQUality_Santander.csv", sep = ";")
+Std_temp <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Santander/Santander_temperatura.xlsx")
+Std_pcptc <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Santander/Santander_precipitacions.xlsx")
+Std_pcptc <- Std_pcptc[seq(dim(Std_pcptc)[1],1),]
+Std_temp <- Std_temp[seq(dim(Std_temp)[1],1),]
+
+```
+
+```{r}
+
+# Cambiem els noms de les variables per homogenitzar
+
+names(Std_casos)[1]<-paste("Date")
+names(Std_casos)[2]<-paste("Covid-19 Cases")
+
+names(Std_defuncions)[1]<-paste("Date")
+names(Std_defuncions)[2]<-paste("Covid-19 Deaths")
+
+names(Std_pcptc)[1]<-paste("Date")
+names(Std_pcptc)[2]<-paste("Precipitation L/m2")
+
+names(Std_temp)[1]<-paste("Date")
+names(Std_temp)[2]<-paste("T. max")
+names(Std_temp)[3]<-paste("T. min")
+
+names(Std_pollution)[1]<-paste("Date")
+
+Std_casos$Date <- as.Date(Std_casos$Date) #, format="%Y/%m/%d")
+Std_defuncions$Date <- as.Date(Std_defuncions$Date) #, format="%Y/%m/%d")
+Std_pcptc$Date <- as.Date(Std_pcptc$Date,format="%Y/%m/%d")
+Std_temp$Date <- as.Date(Std_temp$Date, format="%Y/%m/%d")
+Std_pollution$Date <- as.Date(Std_pollution$Date) #, format="%Y/%m/%d")
+
+
+# Ajuntem totes les variables per crear el dataframe
+
+SANTANDER <- merge(Std_casos, Std_defuncions)
+SANTANDER <- merge(SANTANDER, Std_temp)
+SANTANDER <- merge(SANTANDER, Std_pcptc)
+SANTANDER <- merge(SANTANDER, Std_pollution)
+library(dplyr)
+SANTANDER <- distinct(SANTANDER)
+SANTANDER <- SANTANDER[,c(-10,-11)]
+
+```
+
+
+
+#### Ourense: Perfecte
+
+```{r}
+
+# Descarreguem totes les dades
+
+library(readxl)
+Ourense_casos <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Ourense/Ourense_CasosCovid.xlsx")
+Ourense_casos <- Ourense_casos[seq(dim(Ourense_casos)[1],1),]
+Ourense_pollution <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Ourense/AirQUality_Ourense.csv", sep = ",")
+Ourense_pollution <- Ourense_pollution[c(1:684, 1404:1409),] 
+Ourense_temp <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Ourense/Ourense_temperatura.xlsx")
+Ourense_pcptc <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Ourense/Ourense_precipitacions.xlsx")
+Ourense_pcptc <- Ourense_pcptc[seq(dim(Ourense_pcptc)[1],1),]
+Ourense_temp <- Ourense_temp[seq(dim(Ourense_temp)[1],1),]
+Ourense_humidity <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Ourense/Ourense_humitat.csv")
+
+```
+
+```{r}
+
+# Aconseguim el mateix interval per a totes les dades
+
+Ourense_casos <- Ourense_casos[35:543, ]
+Ourense_pollution<- Ourense_pollution[seq(dim(Ourense_pollution)[1],1),]
+Ourense_pcptc <- Ourense_pcptc[1:536,]
+Ourense_temp <- Ourense_temp[1:537, ]
+
+# Cambiem els noms de les variables per homogenitzar
+
+names(Ourense_casos)[1]<-paste("Date")
+names(Ourense_casos)[2]<-paste("Covid-19 Cases")
+
+names(Ourense_pollution)[1]<-paste("Date")
+Ourense_pollution$Date <- as.Date(Ourense_pollution$Date ,format="%Y/%m/%d")
+
+names(Ourense_pcptc)[1]<-paste("Date")
+names(Ourense_pcptc)[2]<-paste("Precipitation L/m2")
+
+names(Ourense_temp)[1]<-paste("Date")
+names(Ourense_temp)[2]<-paste("T. max")
+names(Ourense_temp)[3]<-paste("T. min")
+
+names(Ourense_humidity)[1]<-paste("Date")
+names(Ourense_humidity)[2]<-paste("Relative humidity 1,5m")
+Ourense_humidity$Date <- as.Date(Ourense_humidity$Date ,format="%d/%m/%Y")
+
+# Ajuntem totes les variables per crear el dataframe
+
+OURENSE <- merge(Ourense_casos, Ourense_pcptc)
+OURENSE <- merge(OURENSE, Ourense_temp)
+OURENSE$Date <- as.Date(OURENSE$Date)
+OURENSE <- merge(OURENSE, Ourense_pollution)
+OURENSE <- merge(OURENSE, Ourense_humidity)
+library(dplyr)
+OURENSE <- distinct(OURENSE)
+```
+
+
+
+
+#### Pontevedra: Perfecte
+
+```{r}
+
+# Descarreguem totes les dades
+
+library(readxl)
+Pontevedra_casos <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Pontevedra/Pontevedra_CasosCovid.xlsx")
+Pontevedra_casos <- Pontevedra_casos[seq(dim(Pontevedra_casos)[1],1),]
+Pontevedra_pollution <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Pontevedra/AirQUality_Pontevedra.csv", sep = ",")
+Pontevedra_pollution <- Pontevedra_pollution[c(1:684, 1404:1409),] 
+Pontevedra_temp <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Pontevedra/Pontevedra_temperatura.xlsx")
+Pontevedra_pcptc <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Pontevedra/Pontevedra_precipitacions.xlsx")
+Pontevedra_pcptc <- Pontevedra_pcptc[seq(dim(Pontevedra_pcptc)[1],1),]
+Pontevedra_temp <- Pontevedra_temp[seq(dim(Pontevedra_temp)[1],1),]
+Pontevedra_pollution<- Pontevedra_pollution[seq(dim(Pontevedra_pollution)[1],1),]
+Pontevedra_humidity <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Pontevedra/Pontevedra_humitat.csv")
+
+```
+
+```{r}
+
+#Cambiem els noms de les variables per homogenitzar
+
+names(Pontevedra_casos)[1]<-paste("Date")
+names(Pontevedra_casos)[2]<-paste("Covid-19 Cases")
+
+names(Pontevedra_pollution)[1]<-paste("Date")
+Pontevedra_pollution$Date <- as.Date(Pontevedra_pollution$Date ,format="%Y/%m/%d")
+
+names(Pontevedra_pcptc)[1]<-paste("Date")
+names(Pontevedra_pcptc)[2]<-paste("Precipitation L/m2")
+
+names(Pontevedra_temp)[1]<-paste("Date")
+names(Pontevedra_temp)[2]<-paste("T. max")
+names(Pontevedra_temp)[3]<-paste("T. min")
+
+names(Pontevedra_humidity)[1]<-paste("Date")
+names(Pontevedra_humidity)[2]<-paste("Relative humidity 1,5m")
+Pontevedra_humidity$Date <- as.Date(Pontevedra_humidity$Date ,format="%d/%m/%Y")
+
+
+# Ajuntem totes les variables per crear el dataframe
+
+PONTEVEDRA <- merge(Pontevedra_casos, Pontevedra_pcptc)
+PONTEVEDRA <- merge(PONTEVEDRA, Pontevedra_temp)
+PONTEVEDRA$Date <- as.Date(PONTEVEDRA$Date)
+PONTEVEDRA <- merge(PONTEVEDRA, Pontevedra_pollution)
+PONTEVEDRA <- merge(PONTEVEDRA, Pontevedra_humidity)
+library(dplyr)
+PONTEVEDRA <- distinct(PONTEVEDRA)
+```
+
+
+
+#### Vigo: Perfecte
+
+```{r}
+# Descarreguem totes les dades
+
+library(readxl)
+Vigo_casos <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Vigo/Vigo_CasosCovid.xlsx")
+Vigo_casos <- Vigo_casos[seq(dim(Vigo_casos)[1],1),]
+Vigo_pollution <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Vigo/AirQUality_Vigo.csv", sep = ",")
+Vigo_pollution <- Vigo_pollution[c(1:684, 1404:1409),] 
+Vigo_temp <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Vigo/Vigo_temperatura.xlsx")
+Vigo_pcptc <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Vigo/Vigo_precipitacions.xlsx")
+Vigo_pcptc <- Vigo_pcptc[seq(dim(Vigo_pcptc)[1],1),]
+Vigo_temp <- Vigo_temp[seq(dim(Vigo_temp)[1],1),]
+Vigo_pollution<- Vigo_pollution[seq(dim(Vigo_pollution)[1],1),]
+Vigo_humidity <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Vigo/Vigo_humitat.csv")
+Vigo_humidity <- Vigo_humidity[1:688,]
+
+
+```
+
+```{r}
+
+#Cambiem els noms de les variables per homogenitzar
+
+names(Vigo_casos)[1]<-paste("Date")
+names(Vigo_casos)[2]<-paste("Covid-19 Cases")
+
+names(Vigo_pollution)[1]<-paste("Date")
+Vigo_pollution$Date <- as.Date(Vigo_pollution$Date ,format="%Y/%m/%d")
+
+names(Vigo_pcptc)[1]<-paste("Date")
+names(Vigo_pcptc)[2]<-paste("Precipitation L/m2")
+
+names(Vigo_temp)[1]<-paste("Date")
+names(Vigo_temp)[2]<-paste("T. max")
+names(Vigo_temp)[3]<-paste("T. min")
+
+names(Vigo_humidity)[1]<-paste("Date")
+names(Vigo_humidity)[2]<-paste("Relative humidity 1,5m")
+Vigo_humidity$Date <- as.Date(Vigo_humidity$Date ,format="%d/%m/%Y")
+
+# Ajuntem totes les variables per crear el dataframe
+
+VIGO <- merge(Vigo_casos, Vigo_pcptc)
+VIGO <- merge(VIGO, Vigo_temp)
+VIGO$Date <- as.Date(VIGO$Date)
+VIGO <- merge(VIGO, Vigo_pollution)
+VIGO <- merge(VIGO,Vigo_humidity)
+library(dplyr)
+VIGO <- distinct(VIGO)
+
+
+```
+
+
+
+
+#### Ceuta: Perfecte
+```{r}
+# Descarreguem totes les dades
+
+library(readxl)
+Ceuta_casos <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Ceuta/CasosCovid_Ceuta.csv")
+Ceuta_defuncions <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Ceuta/DefuncionsCovid_Ceuta.csv")
+Ceuta_pollution <- read.csv2("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Ceuta/Ceuta_pollution.csv", sep=";")
+Ceuta_pcptc <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Ceuta/Ceuta_precipitacions.xlsx")
+Ceuta_pcptc <- Ceuta_pcptc[seq(dim(Ceuta_pcptc)[1],1),]
+Ceuta_temp <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/Ceuta/Ceuta_temperatura.xlsx")
+Ceuta_temp <- Ceuta_temp[seq(dim(Ceuta_temp)[1],1),]
+Ceuta_pollution$pm10 <- as.numeric(Ceuta_pollution$pm10)
+```
+
+```{r}
+
+#Cambiem els noms de les variables per homogenitzar
+
+names(Ceuta_casos)[1]<-paste("Date")
+names(Ceuta_casos)[2]<-paste("Covid-19 Cases")
+Ceuta_casos$Date <- as.Date(Ceuta_casos$Date ,format="%d/%m/%Y")
+
+names(Ceuta_defuncions)[1]<-paste("Date")
+names(Ceuta_defuncions)[2]<-paste("Covid-19 Deaths")
+Ceuta_defuncions$Date <- as.Date(Ceuta_defuncions$Date ,format="%d/%m/%Y")
+
+names(Ceuta_pollution)[1]<-paste("Date")
+Ceuta_pollution$Date <- as.Date(Ceuta_pollution$Date) # ,format="%Y/%m/%d")
+
+names(Ceuta_pcptc)[1]<-paste("Date")
+names(Ceuta_pcptc)[2]<-paste("Precipitation L/m2")
+Ceuta_pcptc$Date <- as.Date(Ceuta_pcptc$Date ,format="%Y/%m/%d")
+
+names(Ceuta_temp)[1]<-paste("Date")
+names(Ceuta_temp)[2]<-paste("T. max")
+names(Ceuta_temp)[3]<-paste("T. min")
+Ceuta_temp$Date <- as.Date(Ceuta_temp$Date ,format="%Y/%m/%d")
+
+
+# Ajuntem totes les variables per crear el dataframe
+
+CEUTA <- merge(Ceuta_casos, Ceuta_defuncions)
+CEUTA <- merge(CEUTA, Ceuta_pcptc)
+CEUTA <- merge(CEUTA, Ceuta_temp)
+CEUTA$Date <- as.Date(CEUTA$Date)
+CEUTA <- merge(CEUTA, Ceuta_pollution)
+library(dplyr)
+CEUTA <- distinct(CEUTA)
+CEUTA <- CEUTA[, -c(7,9,10)]
+```
+
+
+
+
+### EXPLORATORY DATA ANALYSIS
+
+#### Introduction
+
+Exploratory Data Analysis (EDA) is a visualization and transformation process which helps to explore your data in a systematic way.
+EDA is not a formal process with certain rules. During the EDA process, we have to feel free to investigate questions we have about the data, and every idea that comes across. Once we obtain results, we can focus in new questions or productive areas.
+Data cleaning and data quality are just some of the sections which are treated in the EDA process.
+First we generate questions about the data we are working with.
+Second we search for the answers to the previous questions by transforming, visualizing and modeling your data.
+Finally, use what we have learned to refine questions and/or generate new questions.
+
+```{r}
+library(tidyverse)
+```
+
+
+#### Questions
+
+We want to know if there is a relationship between the cases and deaths of COVID-19 and the variables pollution, temperature, precipitation and humidity. Some scientific articles that we have previously commented demonstrate relationships between these variables, that is why we are going to try demonstrating these relationships for Spanish cities.
+
+
+#### Variation
+
+Variation measures the tendency of the values of a variable to change from one measurement to an other, and shows how data is dispersed, or spread out. In statistics, variance measures variability from the mean value of the data. Variation and variance are similar concepts but are not the same.
+
+
+
+#### Distribution visualitsation
+
+COVID-19 Cases
+
+```{r}
+library(ggplot2)
+
+# BARCELONA
+BCN$`Covid-19 Cases` <- as.numeric(BCN$`Covid-19 Cases`)
+ggplot(BCN, aes(x=`Covid-19 Cases`)) + geom_histogram(color="gray", fill= "cornsilk", binwidth=10, breaks=c(0,250,500,750,1000,1250,1500,1750,2000,2250,2500,2750,3000,3250)) +
+labs(title="COVID-19 Cases in Barcelona",x="Daily Covid-19 Cases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# BILBAO
+BILBAO$`Covid-19 Cases` <- as.numeric(BILBAO$`Covid-19 Cases`)
+ggplot(BILBAO, aes(x=`Covid-19 Cases`)) + 
+geom_histogram(color="gray", fill= "cornsilk", binwidth=10, breaks=c(0,50,100,150,200,250,300,350)) +
+labs(title="COVID-19 Cases in Bilbao",x="Daily Covid-19 Cases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# CEUTA
+CEUTA$`Covid-19 Cases` <- as.numeric(CEUTA$`Covid-19 Cases`)
+ggplot(CEUTA, aes(x=`Covid-19 Cases`)) + geom_histogram(color="grey", fill= "cornsilk", binwidth=2) +
+labs(title="COVID-19 Cases in Ceuta",x="Daily Covid-19 Cases", y = "Number of day")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12))
+
+# DONOSTIA
+DONOSTIA$`Covid-19 Cases` <- as.numeric(DONOSTIA$`Covid-19 Cases`)
+ggplot(DONOSTIA, aes(x=`Covid-19 Cases`)) + 
+geom_histogram(color="gray", fill= "cornsilk", binwidth=10, breaks=c(0,50,100,150,200,250)) +
+labs(title="COVID-19 Cases in Donostia",x="Daily Covid-19 Cases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# GIRONA
+GIRONA$`Covid-19 Cases` <- as.numeric(GIRONA$`Covid-19 Cases`)
+ggplot(GIRONA, aes(x=`Covid-19 Cases`)) + 
+geom_histogram(color="gray", fill= "cornsilk", binwidth=10, breaks=c(0,50,100,150,200,250)) +
+labs(title="COVID-19 Cases in Girona",x="Daily Covid-19 Cases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# LLEIDA
+LLEIDA$`Covid-19 Cases` <- as.numeric(LLEIDA$`Covid-19 Cases`)
+ggplot(LLEIDA, aes(x=`Covid-19 Cases`)) + 
+geom_histogram(color="gray", fill= "cornsilk", binwidth=10, breaks=c(0,50,100,150,200,250,300,350,400)) +
+labs(title="COVID-19 Cases in Lleida",x="Daily Covid-19 Cases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# MADRID
+MADRID$`Covid-19 Cases` <- as.numeric(MADRID$`Covid-19 Cases`)
+ggplot(MADRID, aes(x=`Covid-19 Cases`)) + 
+geom_histogram(color="gray", fill= "cornsilk", binwidth=10, breaks=c(0,500,1000,1500,2000,2500,3000,3500,4000, 4500,5000,5500,6000,6500.7000,7500,8000,8500,9000)) +
+labs(title="COVID-19 Cases in Madrid",x="Daily Covid-19 Cases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# MURCIA
+MURCIA$`Covid-19 Cases` <- as.numeric(MURCIA$`Covid-19 Cases`)
+ggplot(MURCIA, aes(x=`Covid-19 Cases`)) + 
+geom_histogram(color="gray", fill= "cornsilk", binwidth=10, breaks=c(0,5,10,15,20)) +
+labs(title="COVID-19 Cases in Murcia",x="Daily Covid-19 Cases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# OURENSE
+OURENSE$`Covid-19 Cases` <- as.numeric(OURENSE$`Covid-19 Cases`)
+ggplot(OURENSE, aes(x=`Covid-19 Cases`)) + 
+geom_histogram(color="gray", fill= "cornsilk", binwidth=10, breaks=c(0,400,800,1200,1600,2000,2400,2800,3200,3600)) +
+labs(title="COVID-19 Cases in Ourense",x="Daily Covid-19 Cases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# PONTEVEDRA
+PONTEVEDRA$`Covid-19 Cases` <- as.numeric(PONTEVEDRA$`Covid-19 Cases`)
+ggplot(PONTEVEDRA, aes(x=`Covid-19 Cases`)) + 
+geom_histogram(color="gray", fill= "cornsilk", binwidth=10, breaks=c(0,400,800,1200,1600,2000,2400,2800,3200,3600)) +
+labs(title="COVID-19 Cases in Pontevedra",x="Daily Covid-19 Cases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# TARRAGONA
+TARRAGONA$`Covid-19 Cases` <- as.numeric(TARRAGONA$`Covid-19 Cases`)
+ggplot(TARRAGONA, aes(x=`Covid-19 Cases`)) + 
+geom_histogram(color="gray", fill= "cornsilk", binwidth=10, breaks=c(0,100,200,300,400,500,600,700,800)) +
+labs(title="COVID-19 Cases in Tarragona",x="Daily Covid-19 Cases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# SANTANDER
+SANTANDER$`Covid-19 Cases` <- as.numeric(SANTANDER$`Covid-19 Cases`)
+ggplot(SANTANDER, aes(x=`Covid-19 Cases`)) + geom_histogram(color="grey", fill= "cornsilk", binwidth=5) +
+labs(title="COVID-19 Cases in Santander",x="Daily Covid-19 Cases", y = "Number of day")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# VIGO
+VIGO$`Covid-19 Cases` <- as.numeric(VIGO$`Covid-19 Cases`)
+ggplot(VIGO, aes(x=`Covid-19 Cases`)) + 
+geom_histogram(color="gray", fill= "cornsilk", binwidth=10, breaks=c(0,400,800,1200,1600,2000,2400,2800,3200,3600,4000,4400,4800,5200,5600)) +
+labs(title="COVID-19 Cases in Vigo",x="Daily Covid-19 Cases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+```
+
+
+```{r}
+# Ara fem un plot de la sèrie temporal per a cada ciutat:
+
+library(ggplot2)
+
+# BARCELONA
+g1 = ggplot(BCN, aes(x=Date, y=`Covid-19 Cases`))+geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2020-05-13", "2021-10-31"))) +
+labs(title="COVID-19 Cases in Barcelona",x="Daily Covid-19 Cases", y = "Number of Cases")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# BILBAO
+g1 = ggplot(BILBAO, aes(x=Date, y=`Covid-19 Cases`))+geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2020-03-02", "2021-10-07"))) +
+labs(title="COVID-19 Cases in Bilbao",x="Daily Covid-19 Cases", y = "Number of Cases")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# CEUTA
+g1 = ggplot(CEUTA, aes(x=Date, y=`Covid-19 Cases`)) + geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2021-03-01", "2021-10-29"))) +
+labs(title="COVID-19 Cases in Ceuta",x="Daily Covid-19 Cases", y = "Number of Cases")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# DONOSTIA
+g1 = ggplot(DONOSTIA, aes(x=Date, y=`Covid-19 Cases`))+geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2020-05-13", "2021-22-07"))) +
+labs(title="COVID-19 Cases in Donostia",x="Daily Covid-19 Cases", y = "Number of Cases")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# GIRONA
+g1 = ggplot(GIRONA, aes(x=Date, y=`Covid-19 Cases`))+geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2020-05-13", "2021-10-31"))) +
+labs(title="COVID-19 Cases in Girona",x="Daily Covid-19 Cases", y = "Number of Cases")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# LLEIDA
+g1 = ggplot(LLEIDA, aes(x=Date, y=`Covid-19 Cases`))+geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2020-05-13", "2021-10-31"))) +
+labs(title="COVID-19 Cases in Lleida",x="Daily Covid-19 Cases", y = "Number of Cases")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# MADRID
+g1 = ggplot(MADRID, aes(x=Date, y=`Covid-19 Cases`))+geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2020-05-13", "2021-10-31"))) +
+labs(title="COVID-19 Cases in Madrid",x="Daily Covid-19 Cases", y = "Number of Cases")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# MURCIA
+g1 = ggplot(MURCIA, aes(x=Date, y=`Covid-19 Cases`))+geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2020-07-09", "2021-10-29"))) +
+labs(title="COVID-19 Cases in Murcia",x="Daily Covid-19 Cases", y = "Number of Cases")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# OURENSE
+g1 = ggplot(OURENSE, aes(x=Date, y=`Covid-19 Cases`))+geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2020-05-13", "2021-10-03"))) +
+labs(title="COVID-19 Cases in Ourense",x="Daily Covid-19 Cases", y = "Number of Cases")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# PONTEVEDRA
+g1 = ggplot(PONTEVEDRA, aes(x=Date, y=`Covid-19 Cases`))+geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2020-05-13", "2021-10-31"))) +
+labs(title="COVID-19 Cases in Pontevedra",x="Daily Covid-19 Cases", y = "Number of Cases")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# SANTANDER
+g1 = ggplot(SANTANDER, aes(x=Date, y=`Covid-19 Cases`)) + geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2020-05-13", "2021-10-31"))) +
+labs(title="COVID-19 Cases in Santander",x="Daily Covid-19 Cases", y = "Number of Cases")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# TARRAGONA
+g1 = ggplot(TARRAGONA, aes(x=Date, y=`Covid-19 Cases`)) + geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2020-05-13", "2021-09-01"))) +
+labs(title="COVID-19 Cases in Tarragona",x="Daily Covid-19 Cases", y = "Number of Cases")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# VIGO
+g1 = ggplot(VIGO, aes(x=Date, y=`Covid-19 Cases`)) + geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2020-05-13", "2021-10-31"))) +
+labs(title="COVID-19 Cases in Vigo",x="Daily Covid-19 Cases", y = "Number of Cases")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+
+```
+```{r}
+par(mfrow = c(mfrow = c(2,2)))
+plot(BCN$`Covid-19 Cases`, main = "COVID-19 Cases Barcelona", ylab = "COVID-19 Cases", xlab = "Days interval", col = 2)
+plot(MADRID$`Covid-19 Cases`, main = "COVID-19 Cases Madrid", ylab = "COVID-19 Cases", xlab = "Days interval", col = 2)
+plot(GIRONA$`Covid-19 Cases`, main = "COVID-19 Cases Girona", ylab = "COVID-19 Cases", xlab = "Days interval", col = 2)
+plot(TARRAGONA$`Covid-19 Cases`, main = "COVID-19 Cases Tarragona", ylab = "COVID-19 Cases", xlab = "Days interval", col = 2)
+plot(LLEIDA$`Covid-19 Cases`, main = "COVID-19 Cases Lleida", ylab = "COVID-19 Cases", xlab = "Days interval", col = 2)
+plot(BILBAO$`Covid-19 Cases`, main = "COVID-19 Cases Bilbao", ylab = "COVID-19 Cases", xlab = "Days interval", col = 2)
+plot(DONOSTIA$`Covid-19 Cases`, main = "COVID-19 Cases Donostia", ylab = "COVID-19 Cases", xlab = "Days interval", col = 2)
+plot(MURCIA$`Covid-19 Cases`, main = "COVID-19 Cases Murcia", ylab = "COVID-19 Cases", xlab = "Days interval", col = 2)
+plot(SANTANDER$`Covid-19 Cases`, main = "COVID-19 Cases Santander", ylab = "COVID-19 Cases", xlab = "Days interval", col = 2)
+plot(VIGO$`Covid-19 Cases`, main = "COVID-19 Cases Vigo", ylab = "COVID-19 Cases", xlab = "Days interval", col = 2)
+plot(PONTEVEDRA$`Covid-19 Cases`, main = "COVID-19 Cases Pontevedra", ylab = "COVID-19 Cases", xlab = "Days interval", col = 2)
+plot(OURENSE$`Covid-19 Cases`, main = "COVID-19 Cases Ourense", ylab = "COVID-19 Cases", xlab = "Days interval", col = 2)
+plot(CEUTA$`Covid-19 Cases`, main = "COVID-19 Cases Ceuta", ylab = "COVID-19 Cases", xlab = "Days interval", col = 2)
+```
+
+
+
+Defuncions de COVID-19
+
+```{r}
+library(ggplot2)
+
+# BARCELONA
+BCN$`Covid-19 Deaths` <- as.numeric(BCN$`Covid-19 Deaths`)
+ggplot(BCN, aes(x=`Covid-19 Deaths`)) + geom_histogram(color="gray", fill= "cornsilk", binwidth=2, breaks=c(0,15,30,45,60,75,90,105,120,135,150)) +
+labs(title="COVID-19 Deceases in Barcelona",x="Daily Covid-19 Deceases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# CEUTA
+CEUTA$`Covid-19 Deaths` <- as.numeric(CEUTA$`Covid-19 Deaths`)
+ggplot(CEUTA, aes(x=`Covid-19 Deaths`)) + geom_histogram(color="grey", fill= "cornsilk", binwidth=1) +
+labs(title="COVID-19 Deceases in Ceuta", x="Daily Covid-19 Deceases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# GIRONA
+GIRONA$`Covid-19 Deaths` <- as.numeric(GIRONA$`Covid-19 Deaths`)
+ggplot(GIRONA, aes(x=`Covid-19 Deaths`)) + geom_histogram(color="grey", fill= "cornsilk", binwidth=1) +
+labs(title="COVID-19 Deceases in Girona", x="Daily Covid-19 Deceases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# LLEIDA
+LLEIDA$`Covid-19 Deaths` <- as.numeric(LLEIDA$`Covid-19 Deaths`)
+ggplot(LLEIDA, aes(x=`Covid-19 Deaths`)) + geom_histogram(color="grey", fill= "cornsilk", binwidth=1) +
+labs(title="COVID-19 Deceases in Lleida", x="Daily Covid-19 Deceases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# MURCIA
+MURCIA$`Covid-19 Deaths` <- as.numeric(MURCIA$`Covid-19 Deaths`)
+ggplot(MURCIA, aes(x=`Covid-19 Deaths`)) + geom_histogram(color="grey", fill= "cornsilk", binwidth=1, breaks=c(0,5,10,15,20,25,30,35)) +
+labs(title="COVID-19 Deceases in Murcia", x="Daily Covid-19 Deceases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# SANTANDER
+SANTANDER$`Covid-19 Deaths` <- as.numeric(SANTANDER$`Covid-19 Deaths`)
+ggplot(SANTANDER, aes(x=`Covid-19 Deaths`)) + geom_histogram(color="grey", fill= "cornsilk", binwidth=1) +
+labs(title="COVID-19 Deceases in Santander",x="Daily Covid-19 Deceases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12))
+
+# TARRAGONA
+TARRAGONA$`Covid-19 Deaths` <- as.numeric(TARRAGONA$`Covid-19 Deaths`)
+ggplot(TARRAGONA, aes(x=`Covid-19 Deaths`)) + geom_histogram(color="grey", fill= "cornsilk", binwidth=1) +
+labs(title="COVID-19 Deceases in Tarragona",x="Daily Covid-19 Deceases", y = "Number of days")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12))
+```
+
+
+```{r}
+# Ara fem un plot de la sèrie temporal per a cada ciutat:
+
+library(ggplot2)
+
+# BARCELONA
+g1 = ggplot(BCN, aes(x=Date, y=`Covid-19 Deaths`))+geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2020-03-02", "2021-10-07"))) +
+labs(title="COVID-19 Deceases in Barcelona",x="Daily Covid-19 Deceases", y = "Number of Deceases")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# CEUTA
+g1 = ggplot(CEUTA, aes(x=Date, y=`Covid-19 Deaths`)) + geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2021-03-01", "2021-10-29"))) +
+labs(title="COVID-19 Deceases in Ceuta",x="Daily Covid-19 Deceases", y = "Number of Deceasess")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# GIRONA
+g1 = ggplot(GIRONA, aes(x=Date, y=`Covid-19 Deaths`)) + geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2021-05-13", "2021-10-31"))) +
+labs(title="COVID-19 Deceases in Girona",x="Daily Covid-19 Deceases", y = "Number of Deceasess")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# LLEIDA
+g1 = ggplot(LLEIDA, aes(x=Date, y=`Covid-19 Deaths`)) + geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2021-05-13", "2021-10-31"))) +
+labs(title="COVID-19 Deceases in Lleida",x="Daily Covid-19 Deceases", y = "Number of Deceasess")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12))
+
+# MURCIA
+g1 = ggplot(MURCIA, aes(x=Date, y=`Covid-19 Deaths`)) + geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2021-07-09", "2021-10-29"))) +
+labs(title="COVID-19 Deceases in Murcia",x="Daily Covid-19 Deceases", y = "Number of Deceasess")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12))
+
+# SANTANDER
+g1 = ggplot(SANTANDER, aes(x=Date, y=`Covid-19 Deaths`)) + geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2020-05-13", "2021-10-31"))) +
+labs(title="COVID-19 Deceases in Santander",x="Daily Covid-19 Deceases", y = "Number of Deceases")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+# TARRAGONA
+g1 = ggplot(TARRAGONA, aes(x=Date, y=`Covid-19 Deaths`)) + geom_line(color = "lightsteelblue3")
+g1+ scale_x_date(limits = as.Date(c("2020-05-13", "2021-10-31"))) +
+labs(title="COVID-19 Deceases in Tarragona",x="Daily Covid-19 Deceases", y = "Number of Deceases")+
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+
+```
+
+```{r}
+par(mfrow = c(mfrow = c(2,2)))
+plot(BCN$`Covid-19 Deaths`, main = "COVID-19 Deceases Barcelona", ylab = "COVID-19 Deceases", xlab = "Days interval", col = 4)
+plot(GIRONA$`Covid-19 Deaths`, main = "COVID-19 Deceases Girona", ylab = "COVID-19 Deceases", xlab = "Days interval", col = 4)
+plot(TARRAGONA$`Covid-19 Deaths`, main = "COVID-19 Deceases Tarragona", ylab = "COVID-19 Deceases", xlab = "Days interval", col = 4)
+plot(LLEIDA$`Covid-19 Deaths`, main = "COVID-19 Deceases Lleida", ylab = "COVID-19 Deceases", xlab = "Days interval", col = 4)
+plot(MURCIA$`Covid-19 Deaths`, main = "COVID-19 Deceases Murcia", ylab = "COVID-19 Deceases", xlab = "Days interval", col = 4)
+plot(SANTANDER$`Covid-19 Deaths`, main = "COVID-19 Deceases Santander", ylab = "COVID-19 Deceases", xlab = "Days interval", col = 4)
+plot(CEUTA$`Covid-19 Deaths`, main = "COVID-19 Deceases Ceuta", ylab = "COVID-19 Deceases", xlab = "Days interval", col = 4)
+```
+
+Pollution:
+
+```{r}
+library(ggplot2)
+
+pm10 <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/pm10.xlsx")
+pm10$PM10 <- as.numeric(pm10$PM10)
+
+
+names <- c(rep("Barcelona", 850) , rep("Santander", 2510) , rep("Ceuta", 1885))
+value <- c(pm10$PM10[1:850], pm10$PM10[851:3360] ,pm10$PM10[3361:5245])
+data_pm10 <- data.frame(names,value)
+ 
+# prepare a special xlab with the number of obs for each group
+my_xlab <- paste(levels(data_pm10$names),"\n(N=",table(data_pm10$names),")",sep="")
+ 
+# plot
+ggplot(data_pm10, aes(x=names, y=value, fill=names)) +
+    geom_boxplot(varwidth = TRUE, alpha=0.2) +
+    theme(legend.position="none") +
+    scale_x_discrete("Cities",labels = c("Barcelona" = "BARCELONA","Santander" = "SANTANDER", "Ceuta" = "CEUTA")) +
+    scale_y_continuous(limits=c(0,90)) +
+    geom_boxplot(outlier.shape = 1) +
+    xlab("names") +
+    scale_fill_manual(values=c("lemonchiffon", "lightcyan3", "lightgoldenrod2")) +
+    theme(legend.position="bottom") +
+    labs(title="PM10 µm per city", x="Cities", y = "Ground level PM10 (µm)") +
+theme(axis.title = element_text(size = 12)) 
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+library(ggplot2)
+
+NO2 <- read_excel("C:/Users/polri/Desktop/TFG/Ciutats_Espanyoles/N02.xlsx")
+
+
+names <- c(rep("Barcelona", 879) , rep("Santander", 2532) , rep("Ceuta", 2494))
+value <- c(NO2$no2[1:877], NO2$no2[878:3410] , NO2$no2[3411:5905])
+data_no2 <- data.frame(names,value)
+ 
+# prepare a special xlab with the number of obs for each group
+my_xlab <- paste(levels(data_no2$names),"\n(N=",table(data_no2$names),")",sep="")
+ 
+# plot
+ggplot(data_no2, aes(x=names, y=value, fill=names)) +
+    geom_boxplot(varwidth = TRUE, alpha=0.2) +
+    scale_x_discrete("Cities",labels = c("Barcelona" = "BARCELONA","Santander" = "SANTANDER", "Ceuta" = "CEUTA")) +
+    scale_y_continuous(limits=c(0,75)) +
+    geom_boxplot(outlier.shape = 1) +
+    xlab("names") +
+    scale_fill_manual(values=c("lemonchiffon", "lightcyan3", "lightgoldenrod2")) +
+    theme(legend.position="bottom") +
+    labs(title="NO2 per city", x="Cities", y = " Ground level NO2 (µm/m3)") +
+theme(axis.title = element_text(size = 12)) 
+
+pm255 <- cbind(BCN$pm25, BILBAO$pm25, CEUTA$pm25, DONOSTIA$pm25, GIRONA$pm25, LLEIDA$pm25, MADRID$pm25, MURCIA$pm25, OURENSE$pm25, PONTEVEDRA$pm25, TARRAGONA$pm25, SANTANDER$pm25, VIGO$pm25)
+boxplot(pm255, ylim = c(0,200), xlab= "Different cities studied", ylab = "PM2,5 µm ground level", main = "PM2,5 µm", col = c(2,3,4,5,6,7))
+
+pm100 <- cbind(BCN$pm10, BILBAO$pm10, CEUTA$pm10, DONOSTIA$pm10, GIRONA$pm10, LLEIDA$pm10, MADRID$pm10, MURCIA$pm10, OURENSE$pm10, PONTEVEDRA$pm10, TARRAGONA$pm10, SANTANDER$pm10, VIGO$pm10)
+boxplot(pm100, ylim = c(0,100), xlab= "Different cities studied", ylab = "PM10 µm ground level", main = "PM10 µm", col = c(2,3,4,5,6,7,8,9,10,11,12))
+
+o33 <- cbind(BCN$o3, BILBAO$o3, CEUTA$o3, DONOSTIA$o3, GIRONA$o3, LLEIDA$o3, MADRID$o3, MURCIA$o3, OURENSE$o3, PONTEVEDRA$o3, TARRAGONA$o3, SANTANDER$o3, VIGO$o3)
+boxplot(o33, ylim = c(0,100), xlab= "Different cities studied", ylab = "O3 µm/m3 ground level", main = "O3 µm/m3", col = c(2,3,4,5,6,7,8,9,10,11,12))
+
+no22 <- cbind(BCN$no2, BILBAO$no2, CEUTA$no2, DONOSTIA$no2, GIRONA$no2, LLEIDA$no2, MADRID$no2, MURCIA$no2, OURENSE$no2, PONTEVEDRA$no2, TARRAGONA$no2, SANTANDER$no2, VIGO$no2)
+boxplot(no22, ylim = c(0,50), xlab= "Different cities studied", ylab = "NO2 µm/m3 ground level", main = "NO2 µm/m3", col = c(2,3,4,5,6,7,8,9,10,11,12,13,14))
+
+so22 <- cbind(BCN$so2, BILBAO$so2, CEUTA$so2, DONOSTIA$so2, GIRONA$so2, LLEIDA$so2, MADRID$so2, MURCIA$so2, OURENSE$so2, PONTEVEDRA$so2, TARRAGONA$so2, SANTANDER$so2, VIGO$so2)
+boxplot(so22, ylim = c(0,15), xlab= "Different cities studied", ylab = "SO2 µm/m3 ground level", main = "SO2 µm/m3", col = c(2,3,4,5,6,7,8))
+
+coo <- cbind(BCN$co, BILBAO$co, CEUTA$co, DONOSTIA$co, GIRONA$co, LLEIDA$co, MADRID$co, MURCIA$co, OURENSE$co, PONTEVEDRA$co, TARRAGONA$co, SANTANDER$co, VIGO$co)
+boxplot(coo, ylim = c(0,10), xlab= "Different cities studied", ylab = "CO ppm ground level", main = "CO ppm ground level", col = c(2,3,4))
+  
+```
+
+
+
+Precipitacions:
+
+```{r}
+#install.packages("cowplot")
+library(ggplot2)
+library(cowplot)
+
+BCN$`Precipitation L/m2` <- as.numeric(BCN$`Precipitation L/m2`)
+p1 <- ggplot(BCN, aes(x=Date, y=`Precipitation L/m2`)) + 
+  geom_point(shape=1, color="lightblue4") +
+  labs(x = "Date", y = "L/m2", color = "Gear", title = " Barcelona: Precipitation L/m2") +
+  scale_y_continuous(name="L/m2", limits=c(0, 90))+
+theme(axis.title = element_text(size = 12)) 
+
+SANTANDER$`Precipitation L/m2` <- as.numeric(SANTANDER$`Precipitation L/m2`)
+p2 <- ggplot(SANTANDER, aes(x=Date, y=`Precipitation L/m2`)) + 
+  geom_point(shape=1, color="lightblue4") +
+  labs(x = "Date", y = "L/m2", color = "Gear", title = " Santander: Precipitation L/m2") +
+  scale_y_continuous(name="L/m2", limits=c(0, 110))+
+theme(axis.title = element_text(size = 12)) 
+
+CEUTA$`Precipitation L/m2` <- as.numeric(CEUTA$`Precipitation L/m2`)
+p3 <- ggplot(CEUTA, aes(x=Date, y=`Precipitation L/m2`)) + 
+  geom_point(shape=1, color="lightblue4") +
+  labs(x = "Date", y = "L/m2", color = "Gear", title = " Ceuta: Precipitation L/m2") +
+  scale_y_continuous(name="L/m2", limits=c(0, 25))+
+theme(axis.title = element_text(size = 12)) 
+
+plot_grid(p1, p2, p3, labels = NULL, nrow = 2, ncol = 2)
+
+```
+
+
+```{r}
+par(mfrow=c(2,3))
+plot(BCN$`Precipitation L/m2`,main = "Barcelona Precipitation", xlab = "Days interval", ylab = "Precipitation L/m2" , xlim = ,col= 10, pch = 1)
+plot(BILBAO$`Precipitation L/m2`,main = "Bilbao Precipitation", xlab = "Days interval", ylab = "Precipitation L/m2" , col= 10, pch = 1)
+plot(CEUTA$`Precipitation L/m2`,main = "Ceuta Precipitation", xlab = "Days interval", ylab = "Precipitation L/m2" , col= 10, pch = 1)
+plot(DONOSTIA$`Precipitation L/m2`,main = "Donostia Precipitation", xlab = "Days interval", ylab = "Precipitation L/m2" , col= 10, pch = 1)
+plot(GIRONA$`Precipitation L/m2`,main = "Girona Precipitation", xlab = "Days interval", ylab = "Precipitation L/m2" , col= 10, pch = 1)
+plot(LLEIDA$`Precipitation L/m2`,main = "Lleida Precipitation", xlab = "Days interval", ylab = "Precipitation L/m2" , col= 10, pch = 1)
+plot(MADRID$`Precipitation L/m2`,main = "Madrid Precipitation", xlab = "Days interval", ylab = "Precipitation L/m2" , col= 10, pch = 1)
+plot(MURCIA$`Precipitation L/m2`,main = "Murcia Precipitation", xlab = "Days interval", ylab = "Precipitation L/m2" , col= 10, pch = 1)
+plot(OURENSE$`Precipitation L/m2`,main = "Ourense Precipitation", xlab = "Days interval", ylab = "Precipitation L/m2" , col= 10, pch = 1)
+plot(PONTEVEDRA$`Precipitation L/m2`,main = "Pontevedra Precipitation", xlab = "Days interval", ylab = "Precipitation L/m2" , col= 10, pch = 1)
+plot(SANTANDER$`Precipitation L/m2`,main = "Santander Precipitation", xlab = "Days interval", ylab = "Precipitation L/m2" , col= 10, pch = 1)
+plot(TARRAGONA$`Precipitation L/m2`,main = "Tarragona Precipitation", xlab = "Days interval", ylab = "Precipitation L/m2" , col= 10, pch = 1)
+plot(VIGO$`Precipitation L/m2`,main = "Vigo Precipitation", xlab = "Days interval", ylab = "Precipitation L/m2" , col= 10, pch = 1)
+```
+
+
+
+Temperature:
+
+```{r}
+library(ggplot2)
+library(tidyr)
+
+par(mfrow = c(2,2)) 
+
+
+BCN_temp <- c(BCN$`T. min`, BCN$`T. max`)
+plot(BCN$Date, BCN$`T. min`, type = "l", col = 4, ylim = c(-5, 35), xlab = "", ylab = "Temperature in °C", main = "Max. and Min. Temperature in Barcelona")
+lines(BCN$Date,BCN$`T. max`, type = "l", col = 2)+
+theme(axis.title = element_text(size = 12)) 
+
+
+CEUTA_temp <- c(CEUTA$`T. min`, CEUTA$`T. max`)
+plot(CEUTA$Date,CEUTA$`T. min`, type = "l", col = 4, ylim = c(-5, 35) , xlab = "2020", ylab = "Temperature in °C", main = "Max. and Min. Temperature in Ceuta")
+lines(CEUTA$Date,CEUTA$`T. max`, type = "l", col = 2)+
+theme(axis.title = element_text(size = 12)) 
+
+
+SANTANDER_temp <- c(SANTANDER$`T. min`, SANTANDER$`T. max`)
+plot(SANTANDER$Date,SANTANDER$`T. min`, type = "l", col = 4, ylim = c(-5, 35) , xlab = "", ylab = "Temperature in °C", main = "Max. and Min. Temperature in Santander")
+lines(SANTANDER$Date,SANTANDER$`T. max`, type = "l", col = 2)+
+theme(axis.title = element_text(size = 12)) 
+
+```
+
+
+
+#### Covariation
+
+```{r}
+
+MADRID$`Covid-19 Cases` <- as.numeric(MADRID$`Covid-19 Cases`)
+MADRID$`Precipitation L/m2` <- as.numeric(MADRID$`Precipitation L/m2`)
+MADRID$`T. max` <- as.numeric(MADRID$`T. max`)
+MADRID$`T. min` <- as.numeric(MADRID$`T. min`)
+MADRID$pm10 <- as.numeric(MADRID$pm10)
+MADRID$o3 <- as.numeric(MADRID$o3)
+MADRID$no2 <- as.numeric(MADRID$no2)
+
+
+corr_matrix_MADRID <- cor(MADRID[,2:9], use = "complete.obs") # Només agafem les observacions completes
+round(corr_matrix_MADRID, 2)
+
+#install.packages("ggcorrplot")
+library(ggcorrplot) 
+
+ggcorrplot(corr_matrix_MADRID, method = 'circle', type = 'lower', lab = TRUE) +
+  ggtitle("Correlograma Madrid") +
+  labs(x = "", y = "", color = "") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+#------------------------------------------------------------------------------------------------------------------------------------
+
+MURCIA$`Covid-19 Cases` <- as.numeric(MURCIA$`Covid-19 Cases`)
+MURCIA$`Covid-19 Deaths` <- as.numeric(MURCIA$`Covid-19 Deaths`)
+MURCIA$`Precipitation L/m2` <- as.numeric(MURCIA$`Precipitation L/m2`)
+MURCIA$`T. max` <- as.numeric(MURCIA$`T. max`)
+MURCIA$`T. min` <- as.numeric(MURCIA$`T. min`)
+MURCIA$pm10 <- as.numeric(MURCIA$pm10)
+MURCIA$o3 <- as.numeric(MURCIA$o3)
+MURCIA$no2 <- as.numeric(MURCIA$no2)
+MURCIA$so2 <- as.numeric(MURCIA$so2)
+
+corr_matrix_MURCIA <- cor(MURCIA[, c(2:10)], use = "complete.obs") # Només agafem les observacions completes
+round(corr_matrix_MURCIA, 2)
+
+#install.packages("ggcorrplot")
+library(ggcorrplot) 
+
+ggcorrplot(corr_matrix_MURCIA, method = 'circle', type = 'lower', lab = TRUE) +
+  ggtitle("Correlograma Murcia") +
+  labs(x = "", y = "", color = "") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+```{r}
+library(ggplot2)
+
+a1 <- ggplot(MADRID, aes(x=`Covid-19 Cases`, y= `T. max`)) +
+  geom_point(size=2, col="navajowhite2") +
+  labs(x = "", y = "Max. Temp. in °C", color = "Gear", title = " MADRID") + theme(plot.title = element_text(hjust = 0.5)) +
+theme(axis.title = element_text(size = 12)) 
+
+a2 <- ggplot(MURCIA, aes(x=`Covid-19 Cases`, y= `T. max`)) +
+  geom_point(size=2, col="navajowhite2") +
+  labs(x = "", y = "", color = "Gear", title = " MURCIA") + theme(plot.title = element_text(hjust = 0.5)) +
+theme(axis.title = element_text(size = 12)) 
+
+a3 <- ggplot(MADRID, aes(x=`Covid-19 Cases`, y= `T. min`)) +
+  geom_point(size=2, col="slategray3") +
+  labs(x = "Covid-19 Cases", y = "Min. Temp. in °C", color = "Gear") +
+theme(axis.title = element_text(size = 12)) 
+
+a4 <- ggplot(MURCIA, aes(x=`Covid-19 Cases`, y= `T. min`)) +
+  geom_point(size=2, col="slategray3") +
+  labs(x = "Covid-19 Cases", y = "", color = "Gear") +
+theme(axis.title = element_text(size = 12)) 
+
+plot_grid1 <- plot_grid(a1, a2, a3, a4, labels = NULL, nrow = 2, ncol = 2)
+
+title <- ggdraw() + 
+  draw_label(
+    "Max. and Min. Daily Temperatures in °C vs. COVID-19 Cases",
+    fontface = 'bold',
+    x = 0,
+    hjust = -0.15
+  ) 
+
+plot_grid(
+  title, plot_grid1,
+  ncol = 1,
+  # rel_heights values control vertical title margins
+  rel_heights = c(0.1, 1)
+) 
+```
+
+```{r}
+
+## MADRID
+
+#primer treiem outliers
+
+which.max(MADRID$so2)
+MADRID <- MADRID[-249,]
+
+b1 <- ggplot(MADRID, aes(x= so2, y= pm25)) +
+  geom_point(size=2, col="slategray") +
+  labs(x = "", y = "PM25 µm", color = "Gear", title = "") + theme(plot.title = element_text(hjust = 0.5)) +
+theme(axis.title = element_text(size = 12)) 
+
+b2 <- ggplot(MADRID, aes(x= so2, y= pm10)) +
+  geom_point(size=2, col="slategray") +
+  scale_y_continuous(limits=c(0, 80))+
+  labs(x = "SO2 µm/m3", y = "PM10 µm", color = "Gear", title = " ") + theme(plot.title = element_text(hjust = 0.5)) +
+theme(axis.title = element_text(size = 12))  
+
+b3 <- ggplot(MADRID, aes(x= so2, y= o3)) +
+  geom_point(size=2, col="slategray") +
+  labs(x = "", y = "O3 µm/m3", color = "Gear", title = "") + theme(plot.title = element_text(hjust = 0.5)) +
+theme(axis.title = element_text(size = 12)) 
+
+plot_grid2 <- plot_grid(b1, b2, b3, labels = NULL, nrow = 1)
+
+title <- ggdraw() + 
+  draw_label(
+    "Madrid: SO2 vs. PM2.5, PM10 and O3",
+    fontface = 'bold',
+    x = 0,
+    hjust = -0.57
+  ) 
+
+plot_grid(
+  title, plot_grid2,
+  ncol = 1,
+  # rel_heights values control vertical title margins
+  rel_heights = c(0.1, 1)
+) 
+
+
+## MURCIA
+
+#primer treiem outliers
+
+which.max(MURCIA$so2)
+MURCIA<- MURCIA[-159,]
+which.max(MURCIA$so2)
+MURCIA<- MURCIA[-116,]
+
+c1 <- ggplot(MURCIA, aes(x= so2, y= no2)) +
+  geom_point(size=2, col="slategray") +
+  labs(x = "", y = "NO2 µm/m3", color = "Gear", title = "") + theme(plot.title = element_text(hjust = 0.5)) +
+theme(axis.title = element_text(size = 12)) 
+
+c2 <- ggplot(MURCIA, aes(x= so2, y= pm10)) +
+  geom_point(size=2, col="slategray") +
+  scale_y_continuous(limits=c(0, 80))+
+  labs(x = "SO2 µm/m3", y = "PM10 µm", color = "Gear", title = " ") + theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12))  
+
+c3 <- ggplot(MURCIA, aes(x= so2, y= o3)) +
+  geom_point(size=2, col="slategray") +
+  labs(x = "", y = "O3 µm/m3", color = "Gear", title = "") + theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12))  
+
+plot_grid2 <- plot_grid(c1, c2, c3, labels = NULL, nrow = 1)
+
+title <- ggdraw() + 
+  draw_label(
+    "Murcia: SO2 vs. PM2.5, PM10 and O3",
+    fontface = 'bold',
+    x = 0,
+    hjust = -0.57
+  ) 
+
+plot_grid(
+  title, plot_grid2,
+  ncol = 1,
+  # rel_heights values control vertical title margins
+  rel_heights = c(0.1, 1)
+) 
+
+
+
+## MADRID
+
+#install.packages("GGally")
+library("GGally")
+MADRID %>%
+  GGally::ggpairs(columns = 6:10, method = "spearman", title = "Madrid: Pollution particles correlation")
+
+
+```
+
+
+```{r}
+ggplot(MURCIA, aes(x= `Precipitation L/m2`, y= `T. max`)) +
+  geom_point(size=2, col="burlywood") +
+  labs(x = "Precipitation L/m2", y = "Maximum Temperature in °C ", color = "Gear", title = "Murcia: Precipitation vs. Maximum temperature") + theme(plot.title = element_text(hjust = 0.5)) +
+theme(axis.title = element_text(size = 12)) 
+
+#install.packages("GGally")
+library("GGally")
+MURCIA %>%
+  GGally::ggpairs(columns = 4:5, title = "Maximum Temperature and Precipitation Correlation") 
+```
+
+```{r}
+ggplot(MURCIA, aes(x= `Covid-19 Deaths`, y= `T. min`)) +
+  geom_point(size=2, col="slategray") +
+  labs(x = "COVID-19 Deceases", y = "Minimum Temperature in °C ", color = "Gear", title = "Murcia: COVID-19 Deceases vs. Minimum temperature") + theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12)) 
+```
+
+```{r}
+## MADRID
+which.max(MADRID$o3)
+MADRID <- MADRID[-41,]
+
+d1 <- ggplot(MADRID, aes(x= o3, y= `T. min`)) +
+  geom_point(size=2, col="rosybrown3") +
+  labs(x = "", y = "Maximum temperature", color = "Gear", title = "MADRID") + theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12))  
+
+d2 <- ggplot(MADRID, aes(x= o3, y= `T. max`)) +
+  geom_point(size=2, col="slategray3") +
+  scale_y_continuous(limits=c(0, 80))+
+  labs(x = "O3 ground level µm/m3", y = "Minimum temperature", color = "Gear", title = " ") + theme(plot.title = element_text(hjust = 0.5))+
+theme(axis.title = element_text(size = 12))  
+
+## MURCIA
+
+
+e1 <- ggplot(MURCIA, aes(x= o3, y= `T. min`)) +
+  geom_point(size=2, col="rosybrown3") +
+  labs(x = "", y = "", color = "Gear", title = "MURCIA") + theme(plot.title = element_text(hjust = 0.5)) +
+theme(axis.title = element_text(size = 12)) 
+
+e2 <- ggplot(MURCIA, aes(x= so2, y= pm10)) +
+  geom_point(size=2, col="slategray3") +
+  scale_y_continuous(limits=c(0, 80))+
+  labs(x = "O3 ground level µm/m3", y = "", color = "Gear", title = " ") + theme(plot.title = element_text(hjust = 0.5)) +
+theme(axis.title = element_text(size = 12)) 
+
+plot_grid2 <- plot_grid(d1, e1, d2, e2, labels = NULL, nrow = 2, ncol = 2)
+
+title <- ggdraw() + 
+  draw_label(
+    "Madrid and Murcia: O3 vs Min. and Max. Temperature",
+    fontface = 'bold',
+    x = 0,
+    hjust = -0.2
+  ) 
+
+plot_grid(
+  title, plot_grid2,
+  ncol = 1,
+  # rel_heights values control vertical title margins
+  rel_heights = c(0.1, 1)
+) 
+
+```
+
+
+
+### Serial dependence
+
+```{r}
+#install.packages("EnvStats")
+library("EnvStats")
+serialCorrelationTest(BCN$`Covid-19 Cases`, test = "rank.von.Neumann", 
+    alternative = "two.sided", conf.level = 0.95)
+BILBAO$`Covid-19 Cases` <- as.numeric(BILBAO$`Covid-19 Cases`)
+serialCorrelationTest(BILBAO$`Covid-19 Cases`, test = "rank.von.Neumann", 
+    alternative = "two.sided", conf.level = 0.95) 
+serialCorrelationTest(CEUTA$`Covid-19 Cases`, test = "rank.von.Neumann", 
+    alternative = "two.sided", conf.level = 0.95) 
+DONOSTIA$`Covid-19 Cases` <- as.numeric(DONOSTIA$`Covid-19 Cases`)
+serialCorrelationTest(DONOSTIA$`Covid-19 Cases`, test = "rank.von.Neumann", 
+    alternative = "two.sided", conf.level = 0.95) 
+serialCorrelationTest(GIRONA$`Covid-19 Cases`, test = "rank.von.Neumann", 
+    alternative = "two.sided", conf.level = 0.95) 
+serialCorrelationTest(LLEIDA$`Covid-19 Cases`, test = "rank.von.Neumann", 
+    alternative = "two.sided", conf.level = 0.95) 
+serialCorrelationTest(MADRID$`Covid-19 Cases`, test = "rank.von.Neumann", 
+    alternative = "two.sided", conf.level = 0.95) 
+serialCorrelationTest(MURCIA$`Covid-19 Cases`, test = "rank.von.Neumann", 
+    alternative = "two.sided", conf.level = 0.95) 
+serialCorrelationTest(OURENSE$`Covid-19 Cases`, test = "rank.von.Neumann", 
+    alternative = "two.sided", conf.level = 0.95) 
+serialCorrelationTest(PONTEVEDRA$`Covid-19 Cases`, test = "rank.von.Neumann", 
+    alternative = "two.sided", conf.level = 0.95) 
+serialCorrelationTest(SANTANDER$`Covid-19 Cases`, test = "rank.von.Neumann", 
+    alternative = "two.sided", conf.level = 0.95) 
+serialCorrelationTest(TARRAGONA$`Covid-19 Cases`, test = "rank.von.Neumann", 
+    alternative = "two.sided", conf.level = 0.95) 
+serialCorrelationTest(VIGO$`Covid-19 Cases`, test = "rank.von.Neumann", 
+    alternative = "two.sided", conf.level = 0.95) 
+```
+
+### New variables /100.000 habitants
+
+```{r}
+BCN$Cases2 <- BCN$`Covid-19 Cases`/(16.64182)
+BCN$Deaths2 <- BCN$`Covid-19 Deaths`/(16.64182)
+
+BILBAO$Cases2 <- BILBAO$`Covid-19 Cases`/(3.50184)
+
+CEUTA$Cases2 <- CEUTA$`Covid-19 Cases`/(0.83502)
+CEUTA$Deaths2 <- CEUTA$`Covid-19 Deaths`/(0.83502)
+
+DONOSTIA$Cases2 <- DONOSTIA$`Covid-19 Cases`/(1.8824)
+
+GIRONA$Cases2 <- GIRONA$`Covid-19 Cases`/(1.03368)
+GIRONA$Deaths2 <- GIRONA$`Covid-19 Deaths`/(1.03368)
+
+LLEIDA$Cases2 <- LLEIDA$`Covid-19 Cases`/(1.37856)
+LLEIDA$Deaths2 <- LLEIDA$`Covid-19 Deaths`/(1.37856)
+
+MADRID$Cases2 <- MADRID$`Covid-19 Cases`/(33.3473)
+
+MURCIA$Cases2 <- MURCIA$`Covid-19 Cases`/(4.47182)
+MURCIA$Deaths2 <- MURCIA$`Covid-19 Deaths`/(4.47182)
+
+OURENSE$Cases2 <- OURENSE$`Covid-19 Cases`/(1.05505)
+
+PONTEVEDRA$Cases2 <- PONTEVEDRA$`Covid-19 Cases`/(0.83029)
+
+SANTANDER$Cases2 <- SANTANDER$`Covid-19 Cases`/(1.73375)
+SANTANDER$Deaths2 <- SANTANDER$`Covid-19 Deaths`/(1.73375)
+
+TARRAGONA$Cases2 <- TARRAGONA$`Covid-19 Cases`/(1.36496)
+TARRAGONA$Deaths2 <- TARRAGONA$`Covid-19 Deaths`/(1.36496)
+
+VIGO$Cases2 <- VIGO$`Covid-19 Cases`/(2.96692)
+
+
+# K-Means: Group separation
+library(stats)
+Ciutats_1 <- c("Barcelona", "Bilbao", "Ceuta", "Donostia", "Girona", "Lleida", "Madrid", "Murcia", "Ourense", "Pontevedra", "Santander", "Tarragona", "Vigo")
+Population_Density <- c(15992.2, 8295.91, 4175, 3091.52, 2529.71, 662.26, 5265.91, 539, 1249.43, 702.81, 4765.83, 2320.63, 2686.47)
+Base_kmeans <- cbind(Ciutats_1,Population_Density)
+kmeans(Population_Density, 4, iter.max = 1000, nstart = 1,algorithm = "Lloyd")
+
+```
+
+
+
+
+
+```{r}
+# Group 1 Population Density Rate Cities: Covid-19 Cases/100.000 hab.
+
+LLEIDA2 = LLEIDA
+PONTEVEDRA2 = PONTEVEDRA
+MURCIA2 = MURCIA
+LLEIDA2$CIUTAT = "LLEIDA"
+PONTEVEDRA2$CIUTAT = "PONTEVEDRA"
+MURCIA2$CIUTAT = "MURCIA"
+
+LLEIDA2 = LLEIDA2 %>% select(Date, Cases2, CIUTAT)
+PONTEVEDRA2 = PONTEVEDRA2 %>% select(Date, Cases2, CIUTAT)
+MURCIA2 = MURCIA2 %>% select(Date, Cases2, CIUTAT)
+TOTES = rbind(LLEIDA2, PONTEVEDRA2, MURCIA2)
+
+library(ggplot2)
+ggplot(TOTES, aes(x = Date, y = Cases2, group = CIUTAT, colour = factor(CIUTAT) )) +
+  geom_line() + 
+  xlab("Date") +
+  ylab("Covid-19 Cases/100.000 hab.")+
+  labs(color='CITIES') +
+  ggtitle("GROUP 1: Population Density: Covid-19 Cases/100.000 hab.")+
+theme(axis.title = element_text(size = 12)) 
+
+
+# Group 2 Population Density Rate Cities: Covid-19 Cases/100.000 hab.
+
+OURENSE2 = OURENSE
+VIGO2 = VIGO
+TARRAGONA2 = TARRAGONA
+GIRONA2 = GIRONA
+OURENSE2$CIUTAT = "OURENSE"
+VIGO2$CIUTAT = "VIGO"
+TARRAGONA2$CIUTAT = "TARRAGONA"
+GIRONA2$CIUTAT = "GIRONA"
+
+OURENSE2 = OURENSE2 %>% select(Date, Cases2, CIUTAT)
+VIGO2 = VIGO2 %>% select(Date, Cases2, CIUTAT)
+TARRAGONA2 = TARRAGONA2 %>% select(Date, Cases2, CIUTAT)
+GIRONA2 = GIRONA2 %>% select(Date, Cases2, CIUTAT)
+TOTES2 = rbind(OURENSE2, VIGO2, TARRAGONA2, GIRONA2)
+
+library(ggplot2)
+ggplot(TOTES2, aes(x = Date, y = Cases2, group = CIUTAT, colour = factor(CIUTAT) )) +
+  geom_line() + 
+  xlab("Date") +
+  ylab("Covid-19 Cases/100.000 hab.")+
+  labs(color='CITIES') +
+  ggtitle("GROUP 2: Population Density: Covid-19 Cases/100.000 hab.")+
+theme(axis.title = element_text(size = 12)) 
+
+
+# Group 3 Population Density Rate Cities: Covid-19 Cases/100.000 hab.
+
+CEUTA2 = CEUTA
+DONOSTIA2 = DONOSTIA
+SANTANDER2 = SANTANDER
+CEUTA2$CIUTAT = "CEUTA"
+DONOSTIA2$CIUTAT = "DONOSTIA"
+SANTANDER2$CIUTAT = "SANTANDER"
+
+CEUTA2 = CEUTA2 %>% select(Date, Cases2, CIUTAT)
+DONOSTIA2 = DONOSTIA2 %>% select(Date, Cases2, CIUTAT)
+SANTANDER2 = SANTANDER2 %>% select(Date, Cases2, CIUTAT)
+TOTES3 = rbind(CEUTA2, DONOSTIA2, SANTANDER2)
+
+library(ggplot2)
+ggplot(TOTES3, aes(x = Date, y = Cases2, group = CIUTAT, colour = factor(CIUTAT) )) +
+  geom_line() + 
+  xlab("Date") +
+  ylab("Covid-19 Cases/100.000 hab.")+
+  labs(color='CITIES') +
+  ggtitle("GROUP 3: Population Density: Covid-19 Cases/100.000 hab.")+
+theme(axis.title = element_text(size = 12)) 
+
+# Group 4 Population Density Rate Cities: Covid-19 Cases/100.000 hab.
+
+BCN2 = BCN
+BILBAO2 = BILBAO
+MADRID2 = MADRID
+BCN2$CIUTAT = "BCN"
+BILBAO2$CIUTAT = "BILBAO"
+MADRID2$CIUTAT = "MADRID"
+
+BCN2 = BCN2 %>% select(Date, Cases2, CIUTAT)
+BILBAO2 = BILBAO2 %>% select(Date, Cases2, CIUTAT)
+MADRID2 = MADRID2 %>% select(Date, Cases2, CIUTAT)
+TOTES4 = rbind(BCN2, BILBAO2, MADRID2)
+
+library(ggplot2)
+ggplot(TOTES4, aes(x = Date, y = Cases2, group = CIUTAT, colour = factor(CIUTAT) )) +
+  geom_line() + 
+  xlab("Date") +
+  ylab("Covid-19 Cases/100.000 hab.")+
+  labs(color='CITIES') +
+  ggtitle("GROUP 4: Population Density: Covid-19 Cases/100.000 hab.")+
+theme(axis.title = element_text(size = 12)) 
+```
+
+
+
+### Lagged Data for Madrid and Murcia:
+
+```{r}
+library("stats")
+
+# Madrid
+
+MADRID$lagged_cases <- lag(MADRID$`Covid-19 Cases`, 14)
+
+corr_matrix_MADRID_lagged <- cor(MADRID[,c(12,3:10)], use = "complete.obs") # Només agafem les observacions completes
+round(corr_matrix_MADRID_lagged, 2)
+
+#install.packages("ggcorrplot")
+library(ggcorrplot) 
+
+ggcorrplot(corr_matrix_MADRID_lagged, method = 'circle', type = 'lower', lab = TRUE) +
+  ggtitle("Madrid's correlogram with a 14-day lag") +
+  labs(x = "", y = "", color = "") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+```{r}
+# Murcia
+
+MURCIA$lagged_cases <- lag(MURCIA$`Covid-19 Cases`, 14)
+MURCIA$lagged_deceases <- lag(MURCIA$`Covid-19 Deaths`, 14)
+
+corr_matrix_MURCIA_lagged <- cor(MURCIA[,c(4:10,13:14)], use = "complete.obs") # Només agafem les observacions completes
+round(corr_matrix_MURCIA_lagged, 2)
+
+#install.packages("ggcorrplot")
+library(ggcorrplot) 
+
+ggcorrplot(corr_matrix_MURCIA_lagged, method = 'circle', type = 'lower', lab = TRUE) +
+  ggtitle("Murcia's correlogram with a 14-day lag") +
+  labs(x = "", y = "", color = "") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+#Poisson mean and variance equality test
+
+```{r}
+#install.packages("performance")
+library(performance)
+
+#BCN
+mean(BCN$`Covid-19 Cases`)
+var(BCN$`Covid-19 Cases`)
+
+mean(BCN$`Covid-19 Deaths`)
+var(BCN$`Covid-19 Deaths`)
+
+#BILBAO
+mean(BILBAO$`Covid-19 Cases`)
+var(BILBAO$`Covid-19 Cases`)
+
+#CEUTA
+mean(CEUTA$`Covid-19 Cases`)
+var(CEUTA$`Covid-19 Cases`)
+
+mean(CEUTA$`Covid-19 Deaths`)
+var(CEUTA$`Covid-19 Deaths`)
+
+#DONOSTIA
+mean(DONOSTIA$`Covid-19 Cases`)
+var(DONOSTIA$`Covid-19 Cases`)
+
+#GIRONA
+mean(GIRONA$`Covid-19 Cases`)
+var(GIRONA$`Covid-19 Cases`)
+
+mean(GIRONA$`Covid-19 Deaths`)
+var(GIRONA$`Covid-19 Deaths`)
+
+#LLEIDA
+mean(LLEIDA$`Covid-19 Cases`)
+var(LLEIDA$`Covid-19 Cases`)
+
+mean(LLEIDA$`Covid-19 Deaths`)
+var(LLEIDA$`Covid-19 Deaths`)
+
+#MADRID
+mean(MADRID$`Covid-19 Cases`)
+var(MADRID$`Covid-19 Cases`)
+
+#MURCIA
+mean(MURCIA$`Covid-19 Cases`)
+var(MURCIA$`Covid-19 Cases`)
+
+mean(MURCIA$`Covid-19 Deaths`)
+var(MURCIA$`Covid-19 Deaths`)
+
+#OURENSE
+mean(OURENSE$`Covid-19 Cases`)
+var(OURENSE$`Covid-19 Cases`)
+
+#PONTEVEDRA
+mean(PONTEVEDRA$`Covid-19 Cases`)
+var(PONTEVEDRA$`Covid-19 Cases`)
+
+#SANTANDER
+mean(SANTANDER$`Covid-19 Cases`)
+var(SANTANDER$`Covid-19 Cases`)
+
+mean(SANTANDER$`Covid-19 Deaths`)
+var(SANTANDER$`Covid-19 Deaths`)
+
+#TARRAGONA
+mean(TARRAGONA$`Covid-19 Cases`)
+var(TARRAGONA$`Covid-19 Cases`)
+
+mean(TARRAGONA$`Covid-19 Deaths`)
+var(TARRAGONA$`Covid-19 Deaths`)
+
+#VIGO
+mean(VIGO$`Covid-19 Cases`)
+var(VIGO$`Covid-19 Cases`)
+```
+
+
+#Tscount
+
+```{r}
+# Barcelona
+
+#install.packages("AER")
+library(AER)
+#dispersion.test
+library(tscount)
+str(BCN)
+covariates_Barcelona <- data.frame(`COVID-19 Cases` = lag(BCN[,2],14),
+                                   Precipitation=BCN[,4],
+                                   Temperature=BCN[,5],
+                                   pm10=BCN[,7],
+                                   O3=BCN[,8],
+                                   no2=BCN[,9])
+str(covariates_Barcelona)
+
+covariates_Barcelona$Temperature <- as.numeric(covariates_Barcelona$Temperature)
+covariates_Barcelona <- na.omit(covariates_Barcelona)
+Casos_Barcelona <- covariates_Barcelona[,1]
+covariates_Barcelona <- covariates_Barcelona[,-1]
+Barcelonafit_nbin <- tsglm(Casos_Barcelona, link=c("log"), xreg = covariates_Barcelona, distr = "nbinom")
+# Tenim valor alt d'overdisperion, 1.462884
+output_Barcelona <- summary(Barcelonafit_nbin)
+output_Barcelona$coefficients[,1] # Coeficients de les variables
+output_Barcelona$coefficients[,2] # Errors estàndard dels coeficients de les variables
+pvalue_Bcn <- (1-pnorm(abs(output_Barcelona$coefficients[1:6,1]/output_Barcelona$coefficients[1:6,2])))*2
+pvalue_Bcn # p-valors dels coeficients de les variables
+#plot(Barcelonafit_nbin)
+
+cor.test(Casos_Barcelona, covariates_Barcelona$Precipitation, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Barcelona, covariates_Barcelona$Temperature, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Barcelona, covariates_Barcelona$no2, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Barcelona, covariates_Barcelona$O3, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Barcelona, covariates_Barcelona$pm10, alternative = c("two.sided"),method = c("spearman"))
+
+# Deceases
+
+covariates_Barcelona2 <- data.frame(`COVID-19 Deceases`=lag(BCN[,3],14),
+                                   Precipitation=BCN[,4],
+                                   Temperature=BCN[,5],
+                                   pm10=BCN[,7],
+                                   O3=BCN[,8],
+                                   no2=BCN[,9])
+
+covariates_Barcelona2$Temperature <- as.numeric(covariates_Barcelona2$Temperature)
+covariates_Barcelona2 <- na.omit(covariates_Barcelona2)
+Deceases_Barcelona <- covariates_Barcelona2[,1]
+covariates_Barcelona2 <- covariates_Barcelona2[,-1]
+Barcelonafit_nbin2 <- tsglm(Deceases_Barcelona, link=c("log"), xreg = covariates_Barcelona2, distr = "nbinom")
+output_Barcelona2 <- summary(Barcelonafit_nbin2)
+output_Barcelona2$coefficients[,1] # Coeficients de les variables
+output_Barcelona2$coefficients[,2] # Errors estàndard dels coeficients de les variables
+pvalue_Bcn2 <- (1-pnorm(abs(output_Barcelona2$coefficients[1:6,1]/output_Barcelona2$coefficients[1:6,2])))*2
+pvalue_Bcn2
+cor.test(Deceases_Barcelona, covariates_Barcelona2$Temperature, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Deceases_Barcelona, covariates_Barcelona2$Precipitation, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Deceases_Barcelona, covariates_Barcelona2$pm10, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Deceases_Barcelona, covariates_Barcelona2$no2, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Deceases_Barcelona, covariates_Barcelona2$O3, alternative = c("two.sided"),method = c("spearman"))
+```
+La covariable pm10 no surt significativa, i les covariables precipitation i no2 estan molt pròximes al límit, però millor quedarse-les, pot deure's a la quantitat de dades.
+
+
+
+```{r}
+# Bilbao
+
+covariates_Bilbao <- data.frame(`COVID-19 Cases` = lag(BILBAO[,2],14),
+                                Precipitation=BILBAO[,3],
+                                pm25=BILBAO[,4],
+                                pm10=BILBAO[,5],
+                                O3=BILBAO[,6],
+                                no2=BILBAO[,7],
+                                so2=BILBAO[,8],
+                                Temperature=BILBAO[,9])
+str(covariates_Bilbao)
+
+covariates_Bilbao$Precipitation <- as.numeric(covariates_Bilbao$Precipitation)
+covariates_Bilbao$Temperature <- as.numeric(covariates_Bilbao$Temperature)
+covariates_Bilbao <- na.omit(covariates_Bilbao)
+Casos_Bilbao <- covariates_Bilbao[,1]
+covariates_Bilbao <- covariates_Bilbao[,-1]
+Bilbaofit_nbin <- tsglm(Casos_Bilbao, link=c("log"), xreg = covariates_Bilbao, distr = "nbinom")
+# No tenim valor alt d'overdisperion, 0.454491
+output_Bilbao <- summary(Bilbaofit_nbin)
+output_Bilbao$coefficients[,1]
+output_Bilbao$coefficients[,2]
+pvalue_Bilbao <- (1-pnorm(abs(output_Bilbao$coefficients[1:8,1]/output_Bilbao$coefficients[1:8,2])))*2
+pvalue_Bilbao
+#plot(Bilbaofit_nbin)
+cor.test(Casos_Bilbao, covariates_Bilbao$Temperature, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Bilbao, covariates_Bilbao$so2, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Bilbao, covariates_Bilbao$no2, alternative = c("two.sided"),method = c("spearman"))
+```
+Les covariables Precipitation, pm25, pm10, o3 no surten significatives.
+
+
+```{r}
+# Ceuta
+
+covariates_Ceuta <- data.frame(`COVID-19 Cases` = lag(CEUTA[,2],14),
+                                Precipitation = CEUTA[,4],
+                                Temperature = CEUTA[,5],
+                                no2=CEUTA[,7])
+str(covariates_Ceuta)
+
+covariates_Ceuta$Temperature <- as.numeric(covariates_Ceuta$Temperature)
+covariates_Ceuta <- na.omit(covariates_Ceuta)
+Casos_Ceuta <- covariates_Ceuta[,1]
+covariates_Ceuta <- covariates_Ceuta[,-1]
+Ceutafit_nbin <- tsglm(Casos_Ceuta, link=c("log"), xreg = covariates_Ceuta, distr = "nbinom")
+output_Ceuta <- summary(Ceutafit_nbin)
+output_Ceuta$coefficients[,1]
+output_Ceuta$coefficients[,2]
+pvalue_Ceuta <- (1-pnorm(abs(output_Ceuta$coefficients[1:4,1]/output_Ceuta$coefficients[1:4,2])))*2
+pvalue_Ceuta
+#plot(Ceutafit_nbin)
+cor.test(Casos_Ceuta, covariates_Ceuta$no2, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Ceuta, covariates_Ceuta$Temperature, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Ceuta, covariates_Ceuta$Precipitation, alternative = c("two.sided"),method = c("spearman"))
+
+#Deceases
+
+covariates_Ceuta2 <- data.frame(`COVID-19 Deaths` = lag(CEUTA[,3],14),
+                                Precipitation = CEUTA[,4],
+                                Temperature = CEUTA[,5],
+                                no2=CEUTA[,7])
+str(covariates_Ceuta2)
+covariates_Ceuta2$Precipitation <- as.numeric(covariates_Ceuta2$Precipitation)
+covariates_Ceuta2$Temperature <- as.numeric(covariates_Ceuta2$Temperature)
+covariates_Ceuta2 <- na.omit(covariates_Ceuta2)
+Deceases_Ceuta <- covariates_Ceuta2[,1]
+covariates_Ceuta2 <- covariates_Ceuta2[,-1]
+Ceutafit_nbin2 <- tsglm(Deceases_Ceuta, link=c("log"), xreg = covariates_Ceuta2, distr = "nbinom")
+output_Ceuta2 <- summary(Ceutafit_nbin)
+output_Ceuta2$coefficients[,1]
+output_Ceuta2$coefficients[,2]
+pvalue_Ceuta2 <- (1-pnorm(abs(output_Ceuta2$coefficients[1:4,1]/output_Ceuta2$coefficients[1:4,2])))*2
+pvalue_Ceuta2
+#plot(Ceutafit_nbin)
+cor.test(Deceases_Ceuta, covariates_Ceuta$no2, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Deceases_Ceuta, covariates_Ceuta$Temperature, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Deceases_Ceuta, covariates_Ceuta$Precipitation, alternative = c("two.sided"),method = c("spearman"))
+```
+Totes les covariables són sigificatives.
+
+
+```{r}
+# Donostia
+
+covariates_Donostia <- data.frame(`COVID-19 Cases` = lag(DONOSTIA[,2],14),
+                                Precipitation =DONOSTIA[,3],
+                                Temperature=DONOSTIA[,10],
+                                pm25=DONOSTIA[,5],
+                                pm10=DONOSTIA[,6],
+                                O3=DONOSTIA[,7],
+                                no2=DONOSTIA[,8],
+                                so2=DONOSTIA[,9])
+str(covariates_Donostia)
+
+covariates_Donostia$Temperature <- as.numeric(covariates_Donostia$Temperature)
+covariates_Donostia$Precipitation <- as.numeric(covariates_Donostia$Precipitation)
+covariates_Donostia <- na.omit(covariates_Donostia)
+Casos_Donostia <- covariates_Donostia[,1]
+covariates_Donostia <- covariates_Donostia[,-1]
+Donostiafit_nbin <- tsglm(Casos_Donostia, link=c("log"), xreg = covariates_Donostia, distr = "nbinom")
+output_Donostia <- summary(Donostiafit_nbin)
+output_Donostia$coefficients[,1]
+output_Donostia$coefficients[,2]
+pvalue_Donostia <- (1-pnorm(abs(output_Donostia$coefficients[1:8,1]/output_Donostia$coefficients[1:8,2])))*2
+pvalue_Donostia
+#plot(Donostiafit_nbin)
+cor.test(Casos_Donostia, covariates_Donostia$no2, alternative = c("two.sided"),method = c("spearman"))
+```
+Totes les covariables són sigificatives.
+
+
+```{r}
+# Girona
+
+covariates_Girona <- data.frame(`COVID-19 Cases` = lag(GIRONA[,2],14),
+                                  Precipitation =GIRONA[,4],
+                                  Temperature=GIRONA[,5],
+                                  pm10=GIRONA[,7],
+                                  no2=GIRONA[,8])
+str(covariates_Girona)
+
+covariates_Girona$Temperature <- as.numeric(covariates_Girona$Temperature)
+covariates_Girona$Precipitation <- as.numeric(covariates_Girona$Precipitation)
+covariates_Girona <- na.omit(covariates_Girona)
+Casos_Girona <- covariates_Girona[,1]
+covariates_Girona <- covariates_Girona[,-1]
+Gironafit_nbin <- tsglm(Casos_Girona, link=c("log"), xreg = covariates_Girona, distr = "nbinom")
+output_Girona <- summary(Gironafit_nbin)
+output_Girona$coefficients[,1]
+output_Girona$coefficients[,2]
+pvalue_Girona <- (1-pnorm(abs(output_Girona$coefficients[1:5,1]/output_Girona$coefficients[1:5,2])))*2
+pvalue_Girona
+#plot(Gironafit_nbin)
+cor.test(Casos_Girona, covariates_Girona$no2, alternative = c("two.sided"),method = c("spearman"))
+
+#Deceases
+
+covariates_Girona2 <- data.frame(`COVID-19 Deceases` = lag(GIRONA[,3],14),
+                                  Precipitation =GIRONA[,4],
+                                  Temperature=GIRONA[,5],
+                                  pm10=GIRONA[,7],
+                                  no2=GIRONA[,8])
+str(covariates_Girona2)
+
+covariates_Girona2$Temperature <- as.numeric(covariates_Girona2$Temperature)
+covariates_Girona2$Precipitation <- as.numeric(covariates_Girona2$Precipitation)
+covariates_Girona2 <- na.omit(covariates_Girona2)
+Deceases_Girona <- covariates_Girona2[,1]
+covariates_Girona <- covariates_Girona2[,-1]
+Gironafit_nbin2 <- tsglm(Deceases_Girona, link=c("log"), xreg = covariates_Girona2, distr = "nbinom")
+output_Girona2 <- summary(Gironafit_nbin2)
+output_Girona2$coefficients[,1]
+output_Girona2$coefficients[,2]
+pvalue_Girona2 <- (1-pnorm(abs(output_Girona2$coefficients[1:5,1]/output_Girona2$coefficients[1:5,2])))*2
+pvalue_Girona2
+#plot(Gironafit_nbin)
+cor.test(Deceases_Girona, covariates_Girona2$Precipitation, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Deceases_Girona, covariates_Girona2$pm10, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Deceases_Girona, covariates_Girona2$no2, alternative = c("two.sided"),method = c("spearman"))
+```
+Les covariables Precipitation, Temperature i pm10 no surten significatives.
+
+
+```{r}
+# Lleida
+
+covariates_Lleida <- data.frame(`COVID-19 Cases` = lag(LLEIDA[,2],14),
+                                  Precipitation =LLEIDA[,4],
+                                  Temperature=LLEIDA[,5],
+                                  pm10=LLEIDA[,7],
+                                  o3=LLEIDA[,8],
+                                  no2=LLEIDA[,9])
+str(covariates_Lleida)
+
+covariates_Lleida$Temperature <- as.numeric(covariates_Lleida$Temperature)
+covariates_Lleida$Precipitation <- as.numeric(covariates_Lleida$Precipitation)
+covariates_Lleida <- na.omit(covariates_Lleida)
+Casos_Lleida <- covariates_Lleida[,1]
+covariates_Lleida <- covariates_Lleida[,-1]
+Lleidafit_nbin <- tsglm(Casos_Lleida, link=c("log"), xreg = covariates_Lleida, distr = "nbinom")
+output_Lleida <- summary(Lleidafit_nbin)
+output_Lleida$coefficients[,1]
+output_Lleida$coefficients[,2]
+pvalue_Lleida <- (1-pnorm(abs(output_Lleida$coefficients[1:6,1]/output_Lleida$coefficients[1:6,2])))*2
+pvalue_Lleida
+#plot(Lleidafit_nbin)
+
+cor.test(Casos_Lleida, covariates_Lleida$no2, alternative = c("two.sided"),method = c("spearman"))
+
+#Deceases
+
+covariates_Lleida2 <- data.frame(`COVID-19 Cases` = lag(LLEIDA[,3],14),
+                                  Precipitation =LLEIDA[,4],
+                                  Temperature=LLEIDA[,5],
+                                  pm10=LLEIDA[,7],
+                                  o3=LLEIDA[,8],
+                                  no2=LLEIDA[,9])
+str(covariates_Lleida2)
+
+covariates_Lleida2$Temperature <- as.numeric(covariates_Lleida2$Temperature)
+covariates_Lleida2$Precipitation <- as.numeric(covariates_Lleida2$Precipitation)
+covariates_Lleida2 <- na.omit(covariates_Lleida2)
+Deceases_Lleida <- covariates_Lleida2[,1]
+covariates_Lleida2 <- covariates_Lleida2[,-1]
+Lleidafit_nbin2 <- tsglm(Deceases_Lleida, link=c("log"), xreg = covariates_Lleida2, distr = "nbinom")
+output_Lleida2 <- summary(Lleidafit_nbin2)
+output_Lleida2$coefficients[,1]
+output_Lleida2$coefficients[,2]
+pvalue_Lleida2 <- (1-pnorm(abs(output_Lleida2$coefficients[1:6,1]/output_Lleida2$coefficients[1:6,2])))*2
+pvalue_Lleida2
+#plot(Lleidafit_nbin)
+
+cor.test(Deceases_Lleida, covariates_Lleida$Temperature, alternative = c("two.sided"),method = c("spearman"))
+```
+Totes les covariables són significatives.
+
+
+```{r}
+# Madrid
+
+covariates_Madrid <- data.frame(`COVID-19 Cases` = lag(MADRID[,2],14),
+                                Precipitation =MADRID[,3],
+                                Temperature=MADRID[,4],
+                                pm25=MADRID[,6],
+                                pm10=MADRID[,7],
+                                o3=MADRID[,8],
+                                no2=MADRID[,9],
+                                so2=MADRID[,10])
+str(covariates_Madrid)
+
+covariates_Madrid$Temperature <- as.numeric(covariates_Madrid$Temperature)
+covariates_Madrid$Precipitation <- as.numeric(covariates_Madrid$Precipitation)
+covariates_Madrid <- na.omit(covariates_Madrid)
+Casos_Madrid <- covariates_Madrid[,1]
+covariates_Madrid <- covariates_Madrid[,-1]
+Madridfit_nbin <- tsglm(Casos_Madrid, link=c("log"), xreg = covariates_Madrid, distr = "nbinom")
+output_Madrid <- summary(Madridfit_nbin)
+output_Madrid$coefficients[,1]
+output_Madrid$coefficients[,2]
+pvalue_Madrid <- (1-pnorm(abs(output_Madrid$coefficients[1:8,1]/output_Madrid$coefficients[1:8,2])))*2
+pvalue_Madrid
+#plot(Madridfit_nbin)
+cor.test(Casos_Madrid, covariates_Madrid$Temperature, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Madrid, covariates_Madrid$so2, alternative = c("two.sided"),method = c("spearman"))
+
+```
+Les covariables Precipitation, pm25, pm10, o3 i no2 no surten significatives.
+
+
+```{r}
+# Murcia
+
+covariates_Murcia <- data.frame(`COVID-19 Cases` =lag(MURCIA[,2],14),
+                                Precipitation =MURCIA[,4],
+                                Temperature=MURCIA[,5],
+                                pm10=MURCIA[,7],
+                                o3=MURCIA[,8],
+                                no2=MURCIA[,9],
+                                so2=MURCIA[,10])
+str(covariates_Murcia)
+
+covariates_Murcia$Temperature <- as.numeric(covariates_Murcia$Temperature)
+covariates_Murcia$Precipitation <-as.numeric(covariates_Murcia$Precipitation)
+covariates_Murcia <- na.omit(covariates_Murcia)
+Casos_Murcia <- covariates_Murcia[,1]
+covariates_Murcia <- covariates_Murcia[,-1]
+Murciafit_nbin <- tsglm(Casos_Murcia, link=c("log"), xreg = covariates_Murcia, distr = "nbinom")
+output_Murcia <- summary(Murciafit_nbin)
+output_Murcia$coefficients[,1]
+output_Murcia$coefficients[,2]
+pvalue_Murcia <- (1-pnorm(abs(output_Murcia$coefficients[1:7,1]/output_Murcia$coefficients[1:7,2])))*2
+pvalue_Murcia
+#plot(Murciafit_nbin)
+
+cor.test(Casos_Murcia  , covariates_Murcia$Precipitation, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Murcia  , covariates_Murcia$Temperature, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Murcia  , covariates_Murcia$no2, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Murcia  , covariates_Murcia$so2, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Murcia  , covariates_Murcia$o3, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Murcia  , covariates_Murcia$pm10, alternative = c("two.sided"),method = c("spearman"))
+
+
+#Deceases
+
+covariates_Murcia2 <- data.frame(`COVID-19 Deceases` =lag(MURCIA[,3],14),
+                                Precipitation =MURCIA[,4],
+                                Temperature=MURCIA[,5],
+                                pm10=MURCIA[,7],
+                                o3=MURCIA[,8],
+                                no2=MURCIA[,9],
+                                so2=MURCIA[,10])
+str(covariates_Murcia2)
+
+covariates_Murcia2$Temperature <- as.numeric(covariates_Murcia2$Temperature)
+covariates_Murcia2$Precipitation <-as.numeric(covariates_Murcia2$Precipitation)
+covariates_Murcia2 <- na.omit(covariates_Murcia2)
+Deceases_Murcia <- covariates_Murcia2[,1]
+covariates_Murcia2 <- covariates_Murcia2[,-1]
+Murciafit_nbin2 <- tsglm(Deceases_Murcia, link=c("log"), xreg = covariates_Murcia2, distr = "nbinom")
+output_Murcia2 <- summary(Murciafit_nbin2)
+output_Murcia2$coefficients[,1]
+output_Murcia2$coefficients[,2]
+pvalue_Murcia2 <- (1-pnorm(abs(output_Murcia2$coefficients[1:7,1]/output_Murcia2$coefficients[1:7,2])))*2
+pvalue_Murcia2
+#plot(Murciafit_nbin)
+
+cor.test(Deceases_Murcia  , covariates_Murcia2$Precipitation, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Deceases_Murcia  , covariates_Murcia2$Temperature, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Deceases_Murcia  , covariates_Murcia2$pm10, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Deceases_Murcia  , covariates_Murcia2$no2, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Deceases_Murcia  , covariates_Murcia2$so2, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Deceases_Murcia  , covariates_Murcia2$o3, alternative = c("two.sided"),method = c("spearman"))
+```
+Totes les covariables són siginificatives.
+
+
+```{r}
+# Ourense
+
+covariates_Ourense <- data.frame(`COVID-19 Cases` = lag(OURENSE[,2],14),
+                                Precipitation =OURENSE[,3],
+                                Temperature=OURENSE[,4],
+                                pm25=OURENSE[,6],
+                                pm10=OURENSE[,7],
+                                o3=OURENSE[,8],
+                                no2=OURENSE[,9],
+                                so2=OURENSE[,10],
+                                co=OURENSE[,11],
+                                humidity=OURENSE[,12])
+str(covariates_Ourense)
+
+covariates_Ourense$humidity <- as.numeric(covariates_Ourense$humidity)
+covariates_Ourense$Temperature <- as.numeric(covariates_Ourense$Temperature)
+covariates_Ourense$Precipitation <- as.numeric(covariates_Ourense$Precipitation)
+covariates_Ourense <- na.omit(covariates_Ourense)
+Casos_Ourense <- covariates_Ourense[,1]
+covariates_Ourense <- covariates_Ourense[,-1]
+Ourensefit_nbin <- tsglm(Casos_Ourense, link=c("log"), xreg = covariates_Ourense, distr = "nbinom")
+output_Ourense <- summary(Ourensefit_nbin)
+output_Ourense$coefficients[,1]
+output_Ourense$coefficients[,2]
+pvalue_Ourense <- (1-pnorm(abs(output_Ourense$coefficients[1:10,1]/output_Ourense$coefficients[1:10,2])))*2
+pvalue_Ourense
+#plot(Ourensefit_nbin)
+cor.test(Casos_Ourense , covariates_Ourense$Temperature, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Ourense , covariates_Ourense$pm25, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Ourense , covariates_Ourense$no2, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Ourense , covariates_Ourense$co, alternative = c("two.sided"),method = c("spearman"))
+```
+Totes les covariables són siginificatives.
+
+
+```{r}
+# Pontevedra
+
+covariates_Pontevedra <- data.frame(`COVID-19 Cases` = lag(PONTEVEDRA[,2],14),
+                                Precipitation =PONTEVEDRA[,3],
+                                Temperature=PONTEVEDRA[,4],
+                                pm25=PONTEVEDRA[,6],
+                                pm10=PONTEVEDRA[,7],
+                                o3=PONTEVEDRA[,8],
+                                no2=PONTEVEDRA[,9],
+                                co=PONTEVEDRA[,11],
+                                humidity=PONTEVEDRA[,12])
+str(covariates_Pontevedra)
+
+covariates_Pontevedra$humidity <- as.numeric(covariates_Pontevedra$humidity)
+covariates_Pontevedra$Temperature <- as.numeric(covariates_Pontevedra$Temperature)
+covariates_Pontevedra$Precipitation <- as.numeric(covariates_Pontevedra$Precipitation)
+covariates_Pontevedra <- na.omit(covariates_Pontevedra)
+Casos_Pontevedra <- covariates_Pontevedra[,1]
+covariates_Pontevedra <- covariates_Pontevedra[,-1]
+Pontevedrafit_nbin <- tsglm(Casos_Pontevedra, link=c("log"), xreg = covariates_Pontevedra, distr = "nbinom")
+output_Pontevedra <- summary(Pontevedrafit_nbin)
+output_Pontevedra$coefficients[,1]
+output_Pontevedra$coefficients[,2]
+pvalue_Pontevedra <- (1-pnorm(abs(output_Pontevedra$coefficients[1:9,1]/output_Pontevedra$coefficients[1:9,2])))*2
+pvalue_Pontevedra
+#plot(Pontevedrafit_nbin)
+
+cor.test(Casos_Pontevedra , covariates_Pontevedra$Temperature, alternative = c("two.sided"),method = c("spearman"))
+```
+Les covariables Precipitation, pm25, pm10, o3, no2, co i humidity no són significatives.
+
+
+```{r}
+# Santander
+
+covariates_Santander <- data.frame(`COVID-19 Cases` = lag(SANTANDER[,2],14),
+                                Precipitation =SANTANDER[,6],
+                                Temperature=SANTANDER[,4],
+                                pm10=SANTANDER[,7],
+                                o3=SANTANDER[,8],
+                                no2=SANTANDER[,9])
+str(covariates_Santander)
+
+covariates_Santander$Temperature <- as.numeric(covariates_Santander$Temperature)
+covariates_Santander$Precipitation <- as.numeric(covariates_Santander$Precipitation)
+covariates_Santander <- na.omit(covariates_Santander)
+Casos_Santander <- covariates_Santander[,1]
+covariates_Santander <- covariates_Santander[,-1]
+Santanderfit_nbin <- tsglm(Casos_Santander, link=c("log"), xreg = covariates_Santander, distr = "nbinom")
+output_Santander <- summary(Santanderfit_nbin)
+output_Santander$coefficients[,1]
+output_Santander$coefficients[,2]
+pvalue_Santander <- (1-pnorm(abs(output_Santander$coefficients[1:6,1]/output_Santander$coefficients[1:6,2])))*2
+pvalue_Santander
+#plot(Santanderfit_nbin)
+cor.test(Casos_Santander , covariates_Santander$Precipitation, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Santander , covariates_Santander$Temperature, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Santander , covariates_Santander$pm10, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Santander , covariates_Santander$o3, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Santander , covariates_Santander$no2, alternative = c("two.sided"),method = c("spearman"))
+
+# Deceases
+
+covariates_Santander2 <- data.frame(`COVID-19 Deceases` = lag(SANTANDER[,3],14),
+                                Precipitation =SANTANDER[,6],
+                                Temperature=SANTANDER[,4],
+                                pm10=SANTANDER[,7],
+                                o3=SANTANDER[,8],
+                                no2=SANTANDER[,9])
+str(covariates_Santander2)
+
+covariates_Santander2$Temperature <- as.numeric(covariates_Santander2$Temperature)
+covariates_Santander2$Precipitation <- as.numeric(covariates_Santander2$Precipitation)
+covariates_Santander2 <- na.omit(covariates_Santander2)
+Deceases_Santander <- covariates_Santander2[,1]
+covariates_Santander2 <- covariates_Santander2[,-1]
+Santanderfit_nbin2 <- tsglm(Deceases_Santander, link=c("log"), xreg = covariates_Santander2, distr = "nbinom")
+output_Santander2 <- summary(Santanderfit_nbin2)
+output_Santander2$coefficients[,1]
+output_Santander2$coefficients[,2]
+pvalue_Santander2 <- (1-pnorm(abs(output_Santander2$coefficients[1:6,1]/output_Santander2$coefficients[1:6,2])))*2
+pvalue_Santander2
+
+cor.test(Deceases_Santander , covariates_Santander2$Temperature, alternative = c("two.sided"),method = c("spearman"))
+```
+Totes les covariables són siginificatives.
+
+
+
+```{r}
+# Tarragona
+
+covariates_Tarragona <- data.frame(`COVID-19 Cases` = lag(TARRAGONA[,2],14),
+                                Precipitation =TARRAGONA[,4],
+                                Temperature=TARRAGONA[,5],
+                                pm10=TARRAGONA[,7],
+                                o3=TARRAGONA[,8],
+                                no2=TARRAGONA[,9])
+str(covariates_Tarragona)
+
+covariates_Tarragona$Temperature <- as.numeric(covariates_Tarragona$Temperature)
+covariates_Tarragona$Precipitation <- as.numeric(covariates_Tarragona$Precipitation)
+covariates_Tarragona <- na.omit(covariates_Tarragona)
+Casos_Tarragona <- covariates_Tarragona[,1]
+covariates_Tarragona <- covariates_Tarragona[,-1]
+Tarragonafit_nbin <- tsglm(Casos_Tarragona, link=c("log"), xreg = covariates_Tarragona, distr = "nbinom")
+output_Tarragona <- summary(Tarragonafit_nbin)
+output_Tarragona$coefficients[,1]
+output_Tarragona$coefficients[,2]
+pvalue_Tarragona <- (1-pnorm(abs(output_Tarragona$coefficients[1:6,1]/output_Tarragona$coefficients[1:6,2])))*2
+pvalue_Tarragona
+#plot(Tarragonafit_nbin)
+
+cor.test(Casos_Tarragona , covariates_Tarragona$pm10, alternative = c("two.sided"),method = c("spearman"))
+
+
+# Deceases
+
+covariates_Tarragona2 <- data.frame(`COVID-19 Deceases` = lag(TARRAGONA[,3],14),
+                                Precipitation =TARRAGONA[,4],
+                                Temperature=TARRAGONA[,5],
+                                pm10=TARRAGONA[,7],
+                                o3=TARRAGONA[,8],
+                                no2=TARRAGONA[,9])
+str(covariates_Tarragona2)
+
+covariates_Tarragona2$Temperature <- as.numeric(covariates_Tarragona2$Temperature)
+covariates_Tarragona2$Precipitation <- as.numeric(covariates_Tarragona2$Precipitation)
+covariates_Tarragona2 <- na.omit(covariates_Tarragona2)
+Deceases_Tarragona <- covariates_Tarragona2[,1]
+covariates_Tarragona2 <- covariates_Tarragona2[,-1]
+Tarragonafit_nbin2 <- tsglm(Deceases_Tarragona, link=c("log"), xreg = covariates_Tarragona2, distr = "nbinom")
+output_Tarragona2 <- summary(Tarragonafit_nbin2)
+output_Tarragona2$coefficients[,1]
+output_Tarragona2$coefficients[,2]
+pvalue_Tarragona2 <- (1-pnorm(abs(output_Tarragona2$coefficients[1:6,1]/output_Tarragona2$coefficients[1:6,2])))*2
+pvalue_Tarragona2
+#plot(Tarragonafit_nbin)
+
+cor.test(Deceases_Tarragona , covariates_Tarragona2$Temperature, alternative = c("two.sided"),method = c("spearman"))
+
+```
+L'intercept i les covariables Precipitation, temperature, o3 i no2 no són significatives.
+
+
+```{r}
+# Vigo
+library(tscount)
+covariates_Vigo <- data.frame(`COVID-19 Cases` = lag(VIGO[,2],14),
+                                Precipitation = VIGO[,3],
+                                Temperature=VIGO[,4],
+                                pm25=VIGO[,6],
+                                pm10=VIGO[,7],
+                                o3=VIGO[,8],
+                                no2=VIGO[,9],
+                                co=VIGO[,11],
+                                humidity=VIGO[,12])
+str(covariates_Vigo)
+
+covariates_Vigo$humidity <- as.numeric(covariates_Vigo$humidity)
+covariates_Vigo$Temperature <- as.numeric(covariates_Vigo$Temperature)
+covariates_Vigo$Precipitation <- as.numeric(covariates_Vigo$Precipitation)
+covariates_Vigo <- na.omit(covariates_Vigo)
+Casos_Vigo <- covariates_Vigo[,1]
+covariates_Vigo <- covariates_Vigo[,-1]
+Vigofit_nbin <- tsglm(Casos_Vigo, link=c("log"), xreg = covariates_Vigo, distr = "nbinom")
+output_Vigo <- summary(Vigofit_nbin)
+output_Vigo$coefficients[,1]
+output_Vigo$coefficients[,2]
+pvalue_Vigo <- (1-pnorm(abs(output_Vigo$coefficients[1:9,1]/output_Vigo$coefficients[1:9,2])))*2
+pvalue_Vigo
+#plot(Vigofit_nbin)
+
+cor.test(Casos_Vigo , covariates_Vigo$pm25, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Vigo , covariates_Vigo$o3, alternative = c("two.sided"),method = c("spearman"))
+cor.test(Casos_Vigo , covariates_Vigo$humidity, alternative = c("two.sided"),method = c("spearman"))
+```
+Les covariables Precipitation, Temperature, pm10, no2 i co no són significatives.
+
+
+```{r}
+citation("EnvStats")
+citation("stats")
+citation("tscount")
+citation("base")
+citation("")
+```
+
